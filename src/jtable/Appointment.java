@@ -17,10 +17,10 @@ import java.util.Date;
 interface Appointmentdet{
     
     public String getDate();
-    public int  getTime();
-    public void setDate(String date);
-    public void setTime(String time);
-            
+    public String  getTime();
+    public String getPName();
+    public String getGPName();
+   
 }
 public final class Appointment implements Comparable,Appointmentdet {
 
@@ -37,34 +37,41 @@ public final class Appointment implements Comparable,Appointmentdet {
         ApptTime = Time;
         GP = GPName;
         patient = PatientName;
-        
-        setDate(ApptDate);
-        setTime(ApptTime);
-    }
-            
-     @Override
-    public void setDate(String dates) {
-       
-    }
-
-    @Override
-    public void setTime(String time) {
      
     }
+            
+    
+
+ 
     @Override
     public String getDate() {
-       return "p";
+       return ApptDate;
     }
 
     @Override
-    public int getTime() {
-       return 0;
+    public String getTime() {
+   
+       return ApptTime;
     }
       @Override
     public int compareTo(Object o) {
         return 0;
     }
 
-  
+    @Override
+    
+    public String getPName() {
+         System.out.println("");
+        return patient;
+      
+    }
+
+    @Override
+    public String getGPName() {
+     return GP;
+        
+    }
+
+ 
 
 }
