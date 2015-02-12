@@ -30,13 +30,14 @@ public final class Appointment implements Comparable,Appointmentdet {
     String ApptTime;
     String GP;
     String patient;    
-    
-    public Appointment(String Date, String Time, String GPName, String PatientName){
+    int Id;
+    public Appointment(String Date, String Time, String GPName, String PatientName, int Appointmentid){
         
         ApptDate = Date;
         ApptTime = Time;
         GP = GPName;
         patient = PatientName;
+        Id = Appointmentid;
      
     }
             
@@ -53,13 +54,10 @@ public final class Appointment implements Comparable,Appointmentdet {
    
        return ApptTime;
     }
-      @Override
-    public int compareTo(Object o) {
-        return 0;
-    }
-
+   
+   
     @Override
-    
+   
     public String getPName() {
          System.out.println("");
         return patient;
@@ -71,7 +69,16 @@ public final class Appointment implements Comparable,Appointmentdet {
      return GP;
         
     }
+    
+    public int getID(){
+        return Id;
+    }
 
- 
+    @Override
+    public int compareTo(Object o) {
+         int compareid = ((Appointment) o).getID();
+          return this.getID()-compareid ;
+    }
+
 
 }
