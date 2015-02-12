@@ -16,6 +16,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import static jtable.Tablex.conn;
@@ -46,15 +47,22 @@ public class Mytable {
     JButton back;
     JButton confirm;
     String GPName;
-    String PatientName = "Adebimpe Godwin";
+    String PatientName;
     String ApptDate;
     String Appttime;
     PreparedStatement pst;
     ImageIcon frameimg;
     JButton appointmentdiary;
-     
+    ArrayList<Appointment> Appointmentdetails = new ArrayList<>();
+    String GP;
+    String Patient;
+     int bookedrow =0;
+     int bookedcolumn=0;
+    
+    int currentrow = 0;
+    int currentcolumn = 0;
     Mytable(String[] Jul, String[] Seven, String[] Simran, String[] Zazu, String[] Amie, String[] hel,
-            String[] Smi, String[] Jal, String Day, String Month, String Year) {
+            String[] Smi, String[] Jal, String Day, String Month, String Year, ArrayList<Appointment> APPoint, String PName) {
 
         Julie = Jul;
         Sabha = Seven;
@@ -67,7 +75,8 @@ public class Mytable {
         day = Day;
         month = Month;
         year = Year;
-
+        Appointmentdetails = APPoint;
+        PatientName = PName;
     }
 
     public void makeframe() {
@@ -114,7 +123,7 @@ public class Mytable {
         frameimg = new ImageIcon("logo.jpg");
 
         back = new JButton("BACK");
-        appointmentdiary =  new JButton("Diary");
+        appointmentdiary = new JButton("Diary");
         table.setGridColor(Color.BLUE);
         confirm = new JButton("Confirm Appointment");
         confirm.setEnabled(false);
@@ -154,46 +163,71 @@ public class Mytable {
                 int row, column;
                 row = table.rowAtPoint(point);
                 column = table.columnAtPoint(point);
-
-                if (table.getValueAt(row, column).equals("BOOKED")) {
-
-                    int choice = JOptionPane.showOptionDialog(null, "Patient Name:\n GP Name:\n Time:\n Date:\n",
-                            "Appointment Information", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE,
-                            null, new String[]{"Close", "Cancel Appointment"}, "default");
-
-                    if (choice == JOptionPane.OK_OPTION) {
-                        table.setValueAt("BOOKED", row, column);
-                        confirm.setEnabled(true);
-                    } else if (choice == JOptionPane.INFORMATION_MESSAGE) {
-                        int secchoice = JOptionPane.showConfirmDialog(null, "Are you sure you want to Cancel this Appointment!!!");
-                        if (secchoice == JOptionPane.OK_OPTION) {
-                            table.setValueAt("FREE", row, column);
-                        } else if (secchoice == JOptionPane.CANCEL_OPTION) {
-                            table.setValueAt("BOOKED", row, column);
-                        }
+                
+                if (currentrow==0&& currentcolumn == 0){
+                    if(!table.getValueAt(row, column).equals("BOOKED")){
+                    currentrow = row;
+                    currentcolumn = column;
+                     
                     }
-                    Apptinfo.setText("Appointment Info:");
-                    //   confirm.setEnabled(false);
-                    table.revalidate();
-                    table.repaint();
-                } else {
-
-                    table.setValueAt("BOOKED", row, column);
-
-                    table.setCellSelectionEnabled(true);
-                    table.setRowSelectionAllowed(false);
-                    table.setColumnSelectionAllowed(false);
-                    table.setEditingRow(row);
-                    confirm.setEnabled(true);
+                }else{
+                    
+                 table.setValueAt("FREE", currentrow, currentcolumn);
+                 currentrow = row;
+                 currentcolumn = column;
+                 table.revalidate();
+                 table.repaint();
                 }
-                selection++;
-                Apptinfo.setText("Appointmemnt info : " + " " + table.getValueAt(row, 0) + " " + "at" + " " + table.getColumnName(column) + " " + "on" + " " + day + " " + month + " " + year);
+                
+                if (table.getValueAt(row, column).equals("FREE") || table.getValueAt(row, column).equals("BOOKED")) {
+                    if (table.getValueAt(row, column).equals("BOOKED")) {
 
-                GPName = (String) table.getValueAt(row, 0);
-                ApptDate = (day + month + year);
-                Appttime = (String) table.getColumnName(column);
+                        for (Appointment Appointmentdetail : Appointmentdetails) {
+                            if (Appointmentdetail.getGPName().equals(table.getValueAt(row, 0))) {
+                                if (Appointmentdetail.getTime().equals(table.getColumnName(column))) {
+                                    GP = Appointmentdetail.getGPName();
+                                    Patient = Appointmentdetail.getPName();
+                                }
+                            }
+                        }
+                        int choice = JOptionPane.showOptionDialog(null, "Patient Name:" + " " + Patient + "\n GP Name:" + " " + GP + " \n Time:" + " " + table.getColumnName(column) + "\n Date:" + " " + day + " " + month + " " + year + "\n",
+                                "Appointment Information", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                                null, new String[]{"Close", "Cancel Appointment"}, "default");
+
+                        if (choice == JOptionPane.OK_OPTION) {
+                            table.setValueAt("BOOKED", row, column);
+                            confirm.setEnabled(true);
+                        } else if (choice == JOptionPane.INFORMATION_MESSAGE) {
+                            int secchoice = JOptionPane.showConfirmDialog(null, "Are you sure you want to Cancel this Appointment!!!");
+                            if (secchoice == JOptionPane.OK_OPTION) {
+                                table.setValueAt("FREE", row, column);
+                            } else if (secchoice == JOptionPane.CANCEL_OPTION) {
+                                table.setValueAt("BOOKED", row, column);
+                            }
+                        }
+                        Apptinfo.setText("Appointment Info:");
+                        //   confirm.setEnabled(false);
+                        table.revalidate();
+                        table.repaint();
+                    } else {
+
+                        table.setValueAt("BOOKED", row, column);
+
+                        table.setCellSelectionEnabled(true);
+                        table.setRowSelectionAllowed(false);
+                        table.setColumnSelectionAllowed(false);
+                        table.setEditingRow(row);
+                        confirm.setEnabled(true);
+                    }
+                    selection++;
+                    Apptinfo.setText("Appointmemnt info : " + " " + table.getValueAt(row, 0) + " " + "at" + " " + table.getColumnName(column) + " " + "on" + " " + day + " " + month + " " + year);
+
+                    GPName = (String) table.getValueAt(row, 0);
+                    ApptDate = (day + month + year);
+                    Appttime = (String) table.getColumnName(column);
+                }
+            
             }
-
             @Override
             public void mousePressed(MouseEvent e) {
 
@@ -216,13 +250,13 @@ public class Mytable {
         });
 
         back.addActionListener((ActionEvent e) -> {
-            Tablex tab = new Tablex();
+            Tablex tab = new Tablex(PatientName);
             tableframe.dispose();
 
         });
         confirm.addActionListener((ActionEvent e) -> {
             try {
-                String sql = "Insert Into Appointment_Diary(PatientName,GPName,Time,Date) values (?,?,?,?)";
+             String sql = "Insert Into Appointment_Diary(PatientName,GPName,Time,Date) values (?,?,?,?)";
                 pst = conn.prepareStatement(sql);
 
                 pst.setString(1, PatientName);
@@ -242,7 +276,7 @@ public class Mytable {
 
         Confirm.add(Apptinfo);
         Confirm.add(confirm);
-        Confirm.add(appointmentdiary);
+        // Confirm.add(appointmentdiary);
         Confirm.add(back);
         tablescroll = new JScrollPane(table);
         table.revalidate();
@@ -252,7 +286,7 @@ public class Mytable {
 
         tableframe.setIconImage(frameimg.getImage());
         Application.getApplication().setDockIconImage(frameimg.getImage());
-        tableframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      //  tableframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         tableframe.getContentPane().add(tablescroll, BorderLayout.NORTH);
         tableframe.getContentPane().add(Confirm, BorderLayout.SOUTH);
         tableframe.setSize(750, 500);
