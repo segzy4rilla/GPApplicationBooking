@@ -163,14 +163,14 @@ public class Mytable {
                 int row, column;
                 row = table.rowAtPoint(point);
                 column = table.columnAtPoint(point);
-                
+              if(!table.getValueAt(row, column).equals("BOOKED")){    
                 if (currentrow==0&& currentcolumn == 0){
-                    if(!table.getValueAt(row, column).equals("BOOKED")){
+                  
                     currentrow = row;
                     currentcolumn = column;
-                     
+             
                     }
-                }else{
+                else{
                     
                  table.setValueAt("FREE", currentrow, currentcolumn);
                  currentrow = row;
@@ -178,7 +178,7 @@ public class Mytable {
                  table.revalidate();
                  table.repaint();
                 }
-                
+              }
                 if (table.getValueAt(row, column).equals("FREE") || table.getValueAt(row, column).equals("BOOKED")) {
                     if (table.getValueAt(row, column).equals("BOOKED")) {
 
