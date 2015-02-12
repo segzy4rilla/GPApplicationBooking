@@ -16,7 +16,7 @@ import javax.swing.JOptionPane;
  *
  * @author Godwinstuff
  */
-public class javaconnect {
+public class javaconnected {
     
     Connection conn = null;
 
