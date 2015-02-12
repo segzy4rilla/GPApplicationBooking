@@ -17,6 +17,7 @@ import java.awt.event.MouseListener;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import static jtable.Tablex.conn;
@@ -80,7 +81,10 @@ public class Mytable {
     }
 
     public void makeframe() {
-
+     Collections.sort(Appointmentdetails);
+        for (int i = 0; i < Appointmentdetails.size(); i++) {
+           System.out.println(Appointmentdetails.get(i).getTime());
+        }
         String[] Columnnames = {"Doctors Name", "9:30am-10:00am", "10:00am-10:30am", "10:30am-11:00am", "13:00pm-13:30pm", "13:30pm-14:00pm", "14:00pm-14:30pm"};
         Apptinfo = new JLabel("Appointment Info:");
 
@@ -290,6 +294,7 @@ public class Mytable {
         tableframe.getContentPane().add(tablescroll, BorderLayout.NORTH);
         tableframe.getContentPane().add(Confirm, BorderLayout.SOUTH);
         tableframe.setSize(750, 500);
+        tableframe.setLocationRelativeTo(null);
         tableframe.setVisible(true);
     }
 }
