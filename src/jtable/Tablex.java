@@ -15,6 +15,7 @@ import java.awt.event.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import javax.swing.*;
 
 /**
@@ -27,10 +28,13 @@ public final class Tablex {
     static JTable table;
     static JComboBox Month;
     static JComboBox Days;
+    String patient;
+    int id;
 
-    Tablex() {
-        conn = javaconnect.ConnecrDb();
+    Tablex(String patientname) {
+        conn = javaconnected.ConnecrDb();
 
+        patient = patientname;
         maketable();
     }
     String selectedday;
@@ -41,7 +45,7 @@ public final class Tablex {
     int yearindex = 0;
     String x = "";
     int selection = 1;
-
+    ArrayList<Appointment> Appt = new ArrayList<>();
     String t93010 = "FREE";
     String t101030 = "FREE";
     String t103011 = "FREE";
@@ -88,12 +92,14 @@ public final class Tablex {
         Application.getApplication().setDockIconImage(frameimg.getImage());
 
         drop.setBackground(Color.gray);
-        fray.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      //  fray.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         fray.setResizable(false);
         fray.setSize(300, 60);
 
         fray.getContentPane().add(drop, BorderLayout.CENTER);
 
+        
+        fray.setLocationRelativeTo(null);
         fray.setVisible(true);
 
         view.addActionListener((ActionEvent e) -> {
@@ -128,7 +134,7 @@ public final class Tablex {
                 }
                 searchdb();
                 Mytable a = new Mytable(Julie, Sabha, Simmy, Zara, Amy, Helen, Smith, Jalooga, selectedday,
-                        selectedmonth, selectedyear);
+                        selectedmonth, selectedyear, Appt, patient);
                 a.makeframe();
 
                 //    System.out.println(selectedday + selectedmonth + selectedyear);
@@ -142,7 +148,7 @@ public final class Tablex {
     public void searchdb() {
 
         //System.out.println(selectedday + selectedmonth + selectedyear);
-        String sql = "select Time,GPName,Date from Appointment_Diary where Date=?";
+        String sql = "select Time,GPName,Date,PatientName from Appointment_Diary where Date=?";
         try {
 
             pst = conn.prepareStatement(sql);
@@ -152,6 +158,29 @@ public final class Tablex {
                 String result = rs.getString("Time");
                 String Name = rs.getString("GPName");
                 String Date = rs.getString("Date");
+                String PName = rs.getString("PatientName");
+
+                     switch (result) {
+                        case "9:30am-10:00am":
+                            id = 0;
+                            break;
+                        case "10:00am-10:30am":
+                           id = 1;
+                            break;
+                        case "10:30am-11:00am":
+                           id = 3;
+                            break;
+                        case "13:00pm-13:30pm":
+                          id = 4;
+                            break;
+                        case "13:30pm-14:00pm":
+                           id = 5;
+                            break;
+                        default:
+                        id = 6;
+                            break;
+                    }
+                Appt.add(new Appointment(Date, result, Name, PName,id));
 
                 // System.out.println(result + Name + Date);
                 if (Name.equals("Dr. Zara")) {
