@@ -83,13 +83,7 @@ public class Mytable {
     }
 
     public void makeframe() {
-        Collections.sort(Appointmentdetails);
-
-        for (int i = 0; i < Appointmentdetails.size(); i++) {
-
-            System.out.println(Appointmentdetails.get(i).getPName() + " " + Appointmentdetails.get(i).getGPName() + " " + Appointmentdetails.get(i).getTime());
-        }
-
+     
         String[] Columnnames = {"Doctors Name", "9:30am-10:00am", "10:00am-10:30am", "10:30am-11:00am", "13:00pm-13:30pm", "13:30pm-14:00pm", "14:00pm-14:30pm"};
         Apptinfo = new JLabel("Appointment Info:");
 
@@ -278,8 +272,16 @@ public class Mytable {
 
         });
         Diary.addActionListener((ActionEvent e) -> {
-            AppointmentDiary a = new AppointmentDiary();
-            a.makeframe();
+              Collections.sort(Appointmentdetails);
+
+             
+        for (int i = 0; i < Appointmentdetails.size(); i++) {
+
+            System.out.println(Appointmentdetails.get(i).getPName() + " " + Appointmentdetails.get(i).getGPName() + " " + Appointmentdetails.get(i).getTime());
+        }
+         AppointmentDiary diary = new AppointmentDiary(Appointmentdetails);
+         diary.makeframe();
+
         });
 
         confirm.addActionListener((ActionEvent e) -> {
