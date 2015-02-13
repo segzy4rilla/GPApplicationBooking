@@ -18,6 +18,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Vector;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import static jtable.Tablex.conn;
@@ -53,15 +54,16 @@ public class Mytable {
     String Appttime;
     PreparedStatement pst;
     ImageIcon frameimg;
-    JButton appointmentdiary;
     ArrayList<Appointment> Appointmentdetails = new ArrayList<>();
     String GP;
     String Patient;
-     int bookedrow =0;
-     int bookedcolumn=0;
-    
+    int bookedrow = 0;
+    int bookedcolumn = 0;
+
     int currentrow = 0;
     int currentcolumn = 0;
+    JButton Diary = new JButton("Diary");
+
     Mytable(String[] Jul, String[] Seven, String[] Simran, String[] Zazu, String[] Amie, String[] hel,
             String[] Smi, String[] Jal, String Day, String Month, String Year, ArrayList<Appointment> APPoint, String PName) {
 
@@ -81,10 +83,13 @@ public class Mytable {
     }
 
     public void makeframe() {
-     Collections.sort(Appointmentdetails);
+        Collections.sort(Appointmentdetails);
+
         for (int i = 0; i < Appointmentdetails.size(); i++) {
-           System.out.println(Appointmentdetails.get(i).getPName()+" " +Appointmentdetails.get(i).getGPName()+" "+Appointmentdetails.get(i).getTime());
+
+            System.out.println(Appointmentdetails.get(i).getPName() + " " + Appointmentdetails.get(i).getGPName() + " " + Appointmentdetails.get(i).getTime());
         }
+
         String[] Columnnames = {"Doctors Name", "9:30am-10:00am", "10:00am-10:30am", "10:30am-11:00am", "13:00pm-13:30pm", "13:30pm-14:00pm", "14:00pm-14:30pm"};
         Apptinfo = new JLabel("Appointment Info:");
 
@@ -127,7 +132,6 @@ public class Mytable {
         frameimg = new ImageIcon("logo.jpg");
 
         back = new JButton("BACK");
-        appointmentdiary = new JButton("Diary");
         table.setGridColor(Color.BLUE);
         confirm = new JButton("Confirm Appointment");
         confirm.setEnabled(false);
@@ -167,26 +171,25 @@ public class Mytable {
                 int row, column;
                 row = table.rowAtPoint(point);
                 column = table.columnAtPoint(point);
-           
-                if (column!=0){
-                if(!table.getValueAt(row, column).equals("BOOKED")){    
-                if (currentrow==0&& currentcolumn == 0){
-                  
-                    currentrow = row;
-                    currentcolumn = column;
-             
+
+                if (column != 0) {
+                    if (!table.getValueAt(row, column).equals("BOOKED")) {
+                        if (currentrow == 0 && currentcolumn == 0) {
+
+                            currentrow = row;
+                            currentcolumn = column;
+
+                        } else {
+
+                            table.setValueAt("FREE", currentrow, currentcolumn);
+                            currentrow = row;
+                            currentcolumn = column;
+                            table.revalidate();
+                            table.repaint();
+                        }
                     }
-                else{
-                    
-                 table.setValueAt("FREE", currentrow, currentcolumn);
-                 currentrow = row;
-                 currentcolumn = column;
-                 table.revalidate();
-                 table.repaint();
                 }
-              }
-            }
-                
+
                 if (table.getValueAt(row, column).equals("FREE") || table.getValueAt(row, column).equals("BOOKED")) {
                     if (table.getValueAt(row, column).equals("BOOKED")) {
 
@@ -209,6 +212,17 @@ public class Mytable {
                             int secchoice = JOptionPane.showConfirmDialog(null, "Are you sure you want to Cancel this Appointment!!!");
                             if (secchoice == JOptionPane.OK_OPTION) {
                                 table.setValueAt("FREE", row, column);
+                                try {
+                                    String sql = "Delete From Appointment_Diary where GPName = (?) AND Time = (?)";
+                                    pst = conn.prepareStatement(sql);
+
+                                    pst.setString(1, GP);
+                                    pst.setString(2, table.getColumnName(column));
+
+                                    pst.execute();
+                                } catch (Exception exe) {
+                                    System.out.println(exe);
+                                }
                             } else if (secchoice == JOptionPane.CANCEL_OPTION) {
                                 table.setValueAt("BOOKED", row, column);
                             }
@@ -234,8 +248,9 @@ public class Mytable {
                     ApptDate = (day + month + year);
                     Appttime = (String) table.getColumnName(column);
                 }
-            
+
             }
+
             @Override
             public void mousePressed(MouseEvent e) {
 
@@ -262,9 +277,14 @@ public class Mytable {
             tableframe.dispose();
 
         });
+        Diary.addActionListener((ActionEvent e) -> {
+            AppointmentDiary a = new AppointmentDiary();
+            a.makeframe();
+        });
+
         confirm.addActionListener((ActionEvent e) -> {
             try {
-             String sql = "Insert Into Appointment_Diary(PatientName,GPName,Time,Date) values (?,?,?,?)";
+                String sql = "Insert Into Appointment_Diary(PatientName,GPName,Time,Date) values (?,?,?,?)";
                 pst = conn.prepareStatement(sql);
 
                 pst.setString(1, PatientName);
@@ -284,7 +304,7 @@ public class Mytable {
 
         Confirm.add(Apptinfo);
         Confirm.add(confirm);
-        // Confirm.add(appointmentdiary);
+        Confirm.add(Diary);
         Confirm.add(back);
         tablescroll = new JScrollPane(table);
         table.revalidate();
@@ -294,7 +314,7 @@ public class Mytable {
 
         tableframe.setIconImage(frameimg.getImage());
         Application.getApplication().setDockIconImage(frameimg.getImage());
-      //  tableframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //  tableframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         tableframe.getContentPane().add(tablescroll, BorderLayout.NORTH);
         tableframe.getContentPane().add(Confirm, BorderLayout.SOUTH);
         tableframe.setSize(750, 500);
