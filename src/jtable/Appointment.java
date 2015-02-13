@@ -22,7 +22,7 @@ interface Appointmentdet{
     public String getGPName();
    
 }
-public final class Appointment implements Comparable,Appointmentdet {
+public  class Appointment implements Comparable,Appointmentdet {
 
     Date Appointmentdate;
     DateFormat formatter;
@@ -79,6 +79,4 @@ public final class Appointment implements Comparable,Appointmentdet {
          int compareid = ((Appointment) o).getID();
           return this.getID()-compareid ;
     }
-
-
 }
