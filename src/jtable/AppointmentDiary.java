@@ -6,13 +6,18 @@
 package jtable;
 
 import com.apple.eawt.Application;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -21,29 +26,36 @@ import javax.swing.table.DefaultTableModel;
 public class AppointmentDiary {
 
     static ImageIcon frameimg;
+    ArrayList<Appointment> details;
     JTable diary = new JTable();
+    JPanel footer = new JPanel();
+    JComboBox GP = new JComboBox();
+     JComboBox Time = new JComboBox();
+    JButton filter = new JButton("Filter results");
+     JButton back = new JButton("Back");
+     String selectedgp ;
+       String time;
+    AppointmentDiary(ArrayList<Appointment> appointmentdetails) {
 
-    ; 
+        details = appointmentdetails;
+
+    }
 
     public void makeframe() {
 
-        String[] Columnnames = {"Doctors Name", "9:30am-10:00am", "10:00am-10:30am", "10:30am-11:00am", "13:00pm-13:30pm", "13:30pm-14:00pm", "14:00pm-14:30pm"};
+        String[] Columnnames = {"Date", "Time", "Patient Name", "GP Name"};
 
         JFrame Diaryframe = new JFrame("Appointment Diary");
 
-        Object data[][] = {
-            {"Dr. Sabha", "a", "a", "a", "a", "a", "a"},
-            {"Dr. Simmy", "a", "a", "a", "a", "a", "a"},
-            {"Dr. Zara", "a", "a", "a", "a", "a", "a"},
-            {"Dr. Amy", "a", "a", "a", "a", "a", "a"},
-            {"Dr. Helen", "a", "a", "a", "a", "a", "a"},
-            {"Dr. Julie", "a", "a", "a", "a", "a", "a"},
-            {"Dr.Smith", "a", "a", "a", "a", "a", "a"},
-            {"Dr. Jalooga", "a", "a", "a", "a", "a", "a"}
-
-        };
-
-        diary = new JTable(data, Columnnames);
+        DefaultTableModel model = new DefaultTableModel();
+        for (String Columnname : Columnnames) {
+            model.addColumn(Columnname);
+        }
+        for (Appointment detail : details) {
+            Object[] data = {detail.getDate(), detail.getTime(), detail.getPName(), detail.getGPName()};
+            model.addRow(data);
+        }
+        diary = new JTable(model);
         diary.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
 
             @Override
@@ -61,21 +73,56 @@ public class AppointmentDiary {
             }
         });
 
+         back.addActionListener((ActionEvent e) -> {
+              
+              Diaryframe.dispose();
+              
+              });
+        
         diary.getTableHeader().setPreferredSize(new Dimension(32, 32));
 
-    //DefaultTableModel model = new DefaultTableModel(data,columnNames);
+        //DefaultTableModel model = new DefaultTableModel(data,columnNames);
         diary.revalidate();
         diary.repaint();
+
+        for (Appointment detail : details) {
+            GP.addItem(detail.getGPName());
+            Time.addItem(detail.getTime());
+        }
+        footer.add(GP);
+        footer.add(Time);
+        footer.add(filter);
+        footer.add(back);
+         final TableRowSorter<TableModel> sorter = new TableRowSorter<>(model);
+          diary.setRowSorter(sorter);
+         JScrollPane scroll = new JScrollPane(diary);
+
+         filter.addActionListener((ActionEvent e) -> {
+              
+       String text =(String) GP.getSelectedItem();
+       String texts = (String) Time.getSelectedItem();
+        if (text.length() == 0) {
+          sorter.setRowFilter(null);
+        } else {
+          sorter.setRowFilter(RowFilter.regexFilter(text));
+         
+        }
+      
+              });
+        
+        footer.setBorder(BorderFactory.createTitledBorder("Filter By"));
 
         frameimg = new ImageIcon("logo.jpg");
         Diaryframe.setIconImage(frameimg.getImage());
         Application.getApplication().setDockIconImage(frameimg.getImage());
-        JScrollPane scroll = new JScrollPane(diary);
-
+       
         scroll.setSize(200, 100);
-        Diaryframe.getContentPane().add(scroll);
-        Diaryframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Diaryframe.setSize(400, 400);
+        Diaryframe.getContentPane().add(scroll, BorderLayout.NORTH);
+        Diaryframe.getContentPane().add(footer, BorderLayout.SOUTH);
+        Diaryframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        Diaryframe.setSize(800, 540);
+        Diaryframe.setLocationRelativeTo(null);
+        Diaryframe.setResizable(false);
         Diaryframe.setVisible(true);
     }
 
