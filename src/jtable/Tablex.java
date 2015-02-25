@@ -8,6 +8,7 @@ package jtable;
 import com.apple.eawt.Application;
 import com.toedter.calendar.JDateChooser;
 
+
 //import com.toedter.calendar.JCalendar;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -15,7 +16,10 @@ import java.awt.event.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.*;
 
 /**
@@ -23,18 +27,26 @@ import javax.swing.*;
  * @author Godwinstuff
  */
 public final class Tablex {
-
+    static Boolean past = false;
     static Connection conn = null;
     static JTable table;
     static JComboBox Month;
     static JComboBox Days;
     String patient;
     int id;
+    Date dates = new Date();
+     DateFormat curday;
+      DateFormat curmonth;
+      DateFormat curyear;
 
     Tablex(String patientname) {
         conn = javaconnected.ConnecrDb();
 
         patient = patientname;
+                         curday = new SimpleDateFormat("d");
+                         curmonth = new SimpleDateFormat("M");
+                       curyear = new SimpleDateFormat("YYYY");
+      
         maketable();
     }
     String selectedday;
@@ -94,7 +106,7 @@ public final class Tablex {
         drop.setBackground(Color.gray);
       //  fray.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         fray.setResizable(false);
-        fray.setSize(300, 60);
+        fray.setSize(790, 300);
 
         fray.getContentPane().add(drop, BorderLayout.CENTER);
 
@@ -107,9 +119,10 @@ public final class Tablex {
             if (((JTextField) date.getDateEditor().getUiComponent()).getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Date should be filled");
             } else {
+                
 
                 String d1 = ((JTextField) date.getDateEditor().getUiComponent()).getText();
-
+        
                 String[] Split = d1.split("-");
                 selectedday = Split[0];
                 String datechoose = Split[1];
@@ -119,7 +132,39 @@ public final class Tablex {
                     }
                 }
 
+                 int monthpos=0;
+                for (int i = 0; i <month.length; i++) {
+                    if(month[i].equals(selectedmonth)){
+                       monthpos = i;
+                    }
+                
+                }
+                      
+             
                 selectedyear = Split[2];
+                int x  = Integer.parseInt(curyear.format(dates));
+               if (Integer.parseInt(selectedyear)<x){
+                  past = true;
+               }else if(Integer.parseInt(selectedyear)==x){
+                   if(Integer.parseInt(curmonth.format(dates))-1< monthpos){
+                      JOptionPane.showMessageDialog(null,"future");
+                       past = false;
+                   }else if(Integer.parseInt(curmonth.format(dates))-1 == monthpos){
+                        if(Integer.parseInt(selectedday)< Integer.parseInt(curday.format(dates)) ){
+                            JOptionPane.showMessageDialog(null, "past");
+                        }else if(Integer.parseInt(selectedday)== Integer.parseInt(curday.format(dates))){
+                             JOptionPane.showMessageDialog(null, "sameday");
+                        }else{
+                            JOptionPane.showMessageDialog(null, "future");
+                        }
+                   }else{
+                         JOptionPane.showMessageDialog(null,"past");
+                             past = true;
+                   }
+               }else{
+                   past = false;
+               }
+                
                 fray.setVisible(false);
 
                 for (int i = 0; i < 6; i++) {
