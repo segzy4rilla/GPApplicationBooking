@@ -8,7 +8,6 @@ package jtable;
 import com.apple.eawt.Application;
 import com.toedter.calendar.JDateChooser;
 
-
 //import com.toedter.calendar.JCalendar;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -27,6 +26,7 @@ import javax.swing.*;
  * @author Godwinstuff
  */
 public final class Tablex {
+
     static Boolean past = false;
     static Connection conn = null;
     static JTable table;
@@ -35,18 +35,18 @@ public final class Tablex {
     String patient;
     int id;
     Date dates = new Date();
-     DateFormat curday;
-      DateFormat curmonth;
-      DateFormat curyear;
+    DateFormat curday;
+    DateFormat curmonth;
+    DateFormat curyear;
 
     Tablex(String patientname) {
         conn = javaconnected.ConnecrDb();
 
         patient = patientname;
-                         curday = new SimpleDateFormat("d");
-                         curmonth = new SimpleDateFormat("M");
-                       curyear = new SimpleDateFormat("YYYY");
-      
+        curday = new SimpleDateFormat("d");
+        curmonth = new SimpleDateFormat("M");
+        curyear = new SimpleDateFormat("YYYY");
+
         maketable();
     }
     String selectedday;
@@ -104,13 +104,12 @@ public final class Tablex {
         Application.getApplication().setDockIconImage(frameimg.getImage());
 
         drop.setBackground(Color.gray);
-      //  fray.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //  fray.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         fray.setResizable(false);
         fray.setSize(790, 300);
 
         fray.getContentPane().add(drop, BorderLayout.CENTER);
 
-        
         fray.setLocationRelativeTo(null);
         fray.setVisible(true);
 
@@ -119,10 +118,9 @@ public final class Tablex {
             if (((JTextField) date.getDateEditor().getUiComponent()).getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Date should be filled");
             } else {
-                
 
                 String d1 = ((JTextField) date.getDateEditor().getUiComponent()).getText();
-        
+
                 String[] Split = d1.split("-");
                 selectedday = Split[0];
                 String datechoose = Split[1];
@@ -132,39 +130,36 @@ public final class Tablex {
                     }
                 }
 
-                 int monthpos=0;
-                for (int i = 0; i <month.length; i++) {
-                    if(month[i].equals(selectedmonth)){
-                       monthpos = i;
+                int monthpos = 0;
+                for (int i = 0; i < month.length; i++) {
+                    if (month[i].equals(selectedmonth)) {
+                        monthpos = i;
                     }
-                
+
                 }
-                      
-             
+
                 selectedyear = Split[2];
-                int x  = Integer.parseInt(curyear.format(dates));
-               if (Integer.parseInt(selectedyear)<x){
-                  past = true;
-               }else if(Integer.parseInt(selectedyear)==x){
-                   if(Integer.parseInt(curmonth.format(dates))-1< monthpos){
-                      JOptionPane.showMessageDialog(null,"future");
-                       past = false;
-                   }else if(Integer.parseInt(curmonth.format(dates))-1 == monthpos){
-                        if(Integer.parseInt(selectedday)< Integer.parseInt(curday.format(dates)) ){
-                            JOptionPane.showMessageDialog(null, "past");
-                        }else if(Integer.parseInt(selectedday)== Integer.parseInt(curday.format(dates))){
-                             JOptionPane.showMessageDialog(null, "sameday");
-                        }else{
-                            JOptionPane.showMessageDialog(null, "future");
+
+                if (Integer.parseInt(selectedyear) < Integer.parseInt(curyear.format(dates))) {
+                    past = true;
+                } else if (Integer.parseInt(selectedyear) == Integer.parseInt(curyear.format(dates))) {
+                    if (Integer.parseInt(curmonth.format(dates)) - 1 < monthpos) {
+                        past = false;
+                    } else if (Integer.parseInt(curmonth.format(dates)) - 1 == monthpos) {
+                        if (Integer.parseInt(selectedday) < Integer.parseInt(curday.format(dates))) {
+                            past = true;
+                        } else if (Integer.parseInt(selectedday) == Integer.parseInt(curday.format(dates))) {
+                            past = false;
+                        } else {
+                            past = false;
                         }
-                   }else{
-                         JOptionPane.showMessageDialog(null,"past");
-                             past = true;
-                   }
-               }else{
-                   past = false;
-               }
-                
+                    } else {
+                        past = true;
+                    }
+                } else {
+                    past = false;
+                }
+
                 fray.setVisible(false);
 
                 for (int i = 0; i < 6; i++) {
@@ -179,7 +174,7 @@ public final class Tablex {
                 }
                 searchdb();
                 Mytable a = new Mytable(Julie, Sabha, Simmy, Zara, Amy, Helen, Smith, Jalooga, selectedday,
-                        selectedmonth, selectedyear, Appt, patient);
+                        selectedmonth, selectedyear, Appt, patient, past);
                 a.makeframe();
 
                 //    System.out.println(selectedday + selectedmonth + selectedyear);
@@ -205,27 +200,27 @@ public final class Tablex {
                 String Date = rs.getString("Date");
                 String PName = rs.getString("PatientName");
 
-                     switch (result) {
-                        case "9:30am-10:00am":
-                            id = 0;
-                            break;
-                        case "10:00am-10:30am":
-                           id = 1;
-                            break;
-                        case "10:30am-11:00am":
-                           id = 3;
-                            break;
-                        case "13:00pm-13:30pm":
-                          id = 4;
-                            break;
-                        case "13:30pm-14:00pm":
-                           id = 5;
-                            break;
-                        default:
+                switch (result) {
+                    case "9:30am-10:00am":
+                        id = 0;
+                        break;
+                    case "10:00am-10:30am":
+                        id = 1;
+                        break;
+                    case "10:30am-11:00am":
+                        id = 3;
+                        break;
+                    case "13:00pm-13:30pm":
+                        id = 4;
+                        break;
+                    case "13:30pm-14:00pm":
+                        id = 5;
+                        break;
+                    default:
                         id = 6;
-                            break;
-                    }
-                Appt.add(new Appointment(Date, result, Name, PName,id));
+                        break;
+                }
+                Appt.add(new Appointment(Date, result, Name, PName, id));
 
                 // System.out.println(result + Name + Date);
                 if (Name.equals("Dr. Zara")) {
