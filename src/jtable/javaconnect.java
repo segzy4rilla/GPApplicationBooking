@@ -13,14 +13,14 @@ import java.sql.*;
 import javax.swing.*;
 public class javaconnect {
     
-   Connection conned = null;
+   Connection conn = null;
 
     public static Connection ConnecrDb() {
         try {
             Class.forName("org.sqlite.JDBC");
-            Connection conned = DriverManager.getConnection("jdbc:sqlite:/Users/Godwinstuff/Downloads/medicalDBe.sqlite");
+            Connection conned = DriverManager.getConnection("jdbc:sqlite:/Users/Godwinstuff/Downloads/SoftwareGroupProject 3/MedicalDB.sqlite");
             return conned;
-        } catch (Exception e) {
+        } catch (ClassNotFoundException | SQLException e) {
             JOptionPane.showMessageDialog(null, e);
             return null;
         }

@@ -31,4 +31,7 @@ public class javaconnected {
             return null;
         }
 }
+    public static void main(String[] args) {
+        ConnecrDb();
+    }
 }

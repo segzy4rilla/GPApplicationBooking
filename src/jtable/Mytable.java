@@ -18,7 +18,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Vector;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import static jtable.Tablex.conn;
@@ -127,7 +126,7 @@ public class Mytable {
 
         back = new JButton("BACK");
         table.setGridColor(Color.BLUE);
-        confirm = new JButton("Confirm Appointment");
+        confirm = new JButton(" Save ");
         confirm.setEnabled(false);
         table.setBackground(Color.white);
         table.setCellSelectionEnabled(true);
@@ -285,6 +284,10 @@ public class Mytable {
         });
 
         confirm.addActionListener((ActionEvent e) -> {
+                 int choice = JOptionPane.showOptionDialog(null," Do you want to confirm this appointment" ,
+                                "Appointment Information", JOptionPane.INFORMATION_MESSAGE, JOptionPane.OK_CANCEL_OPTION,
+                                null, new String[]{"Cancel", "Confirm"}, "default");
+if (choice == JOptionPane.INFORMATION_MESSAGE) {
             try {
                 String sql = "Insert Into Appointment_Diary(PatientName,GPName,Time,Date) values (?,?,?,?)";
                 pst = conn.prepareStatement(sql);
@@ -297,11 +300,13 @@ public class Mytable {
                 pst.execute();
 
                 JOptionPane.showMessageDialog(null, "Appointment Booked");
-
+                confirm.setEnabled(false);
             } catch (SQLException | HeadlessException ex) {
                 JOptionPane.showMessageDialog(null, ex);
             }
-            table.setBackground(Color.red);
+}else{
+   
+}
         });
 
         Confirm.add(Apptinfo);
