@@ -58,13 +58,13 @@ public class Mytable {
     String Patient;
     int bookedrow = 0;
     int bookedcolumn = 0;
-
+    boolean pastdetails;
     int currentrow = 0;
     int currentcolumn = 0;
     JButton Diary = new JButton("Diary");
 
     Mytable(String[] Jul, String[] Seven, String[] Simran, String[] Zazu, String[] Amie, String[] hel,
-            String[] Smi, String[] Jal, String Day, String Month, String Year, ArrayList<Appointment> APPoint, String PName) {
+            String[] Smi, String[] Jal, String Day, String Month, String Year, ArrayList<Appointment> APPoint, String PName,boolean pastdet) {
 
         Julie = Jul;
         Sabha = Seven;
@@ -79,6 +79,7 @@ public class Mytable {
         year = Year;
         Appointmentdetails = APPoint;
         PatientName = PName;
+        pastdetails = pastdet;
     }
 
     public void makeframe() {
@@ -159,6 +160,8 @@ public class Mytable {
             @Override
 
             public void mouseClicked(MouseEvent e) {
+                
+                if(!pastdetails){
                 Point point = e.getPoint();
 
                 int row, column;
@@ -241,7 +244,7 @@ public class Mytable {
                     ApptDate = (day + month + year);
                     Appttime = (String) table.getColumnName(column);
                 }
-
+                }
             }
 
             @Override
@@ -274,10 +277,7 @@ public class Mytable {
               Collections.sort(Appointmentdetails);
 
              
-        for (int i = 0; i < Appointmentdetails.size(); i++) {
-
-            System.out.println(Appointmentdetails.get(i).getPName() + " " + Appointmentdetails.get(i).getGPName() + " " + Appointmentdetails.get(i).getTime());
-        }
+   
          AppointmentDiary diary = new AppointmentDiary(Appointmentdetails);
          diary.makeframe();
 
@@ -310,7 +310,9 @@ if (choice == JOptionPane.INFORMATION_MESSAGE) {
         });
 
         Confirm.add(Apptinfo);
+        if(!pastdetails){
         Confirm.add(confirm);
+        }
         Confirm.add(Diary);
         Confirm.add(back);
         tablescroll = new JScrollPane(table);

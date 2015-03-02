@@ -2,11 +2,13 @@ package jtable;
 
 
 import java.awt.Dimension;
+import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import net.proteanit.sql.DbUtils;
 
@@ -137,15 +139,16 @@ public class patient_page extends javax.swing.JFrame {
 
             rs=pst.executeQuery();
             search_results.setModel(DbUtils.resultSetToTableModel(rs));
-            if(results ==0){
-        JOptionPane.showMessageDialog(null, "No Patient Record Found");   
+            if(results >=1){
+                  search_results.setVisible(true); 
+        }else{
+          JOptionPane.showMessageDialog(null, "No Patient Record Found");   
         search_results.setVisible(false);
         
-        }else{
-           search_results.setVisible(true);          
+         
             }
             
-        }catch(Exception e){
+        }catch(SQLException | HeadlessException e){
         }
         finally {
         try{
@@ -327,6 +330,7 @@ public class patient_page extends javax.swing.JFrame {
             }
         });
 
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jtable/Delete-icon.png"))); // NOI18N
         jButton3.setText("Clear");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -334,6 +338,7 @@ public class patient_page extends javax.swing.JFrame {
             }
         });
 
+        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jtable/Actions-document-save-icon.png"))); // NOI18N
         jButton4.setText("Save");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -341,6 +346,7 @@ public class patient_page extends javax.swing.JFrame {
             }
         });
 
+        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jtable/back-icon.png"))); // NOI18N
         jButton5.setText("Back");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -496,6 +502,7 @@ public class patient_page extends javax.swing.JFrame {
         jScrollPane1.setViewportView(search_results);
 
         jButton6.setFont(new java.awt.Font("Lucida Grande", 1, 14)); // NOI18N
+        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jtable/back-icon.png"))); // NOI18N
         jButton6.setText("Back");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -559,6 +566,7 @@ public class patient_page extends javax.swing.JFrame {
             }
         });
 
+        searchpatient_btn1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jtable/Start-Menu-Search-icon.png"))); // NOI18N
         searchpatient_btn1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 searchpatient_btn1ActionPerformed(evt);
@@ -566,6 +574,7 @@ public class patient_page extends javax.swing.JFrame {
         });
 
         jButton8.setFont(new java.awt.Font("Lucida Grande", 1, 14)); // NOI18N
+        jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jtable/Delete-icon.png"))); // NOI18N
         jButton8.setText("Clear");
         jButton8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -668,6 +677,7 @@ public class patient_page extends javax.swing.JFrame {
         jLabel26.setText("Town:");
 
         edit_btn.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
+        edit_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jtable/Pencil-icon.png"))); // NOI18N
         edit_btn.setText("Edit");
         edit_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -676,6 +686,7 @@ public class patient_page extends javax.swing.JFrame {
         });
 
         delete_btn.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
+        delete_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jtable/Actions-edit-delete-icon.png"))); // NOI18N
         delete_btn.setText("Delete");
         delete_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -684,6 +695,7 @@ public class patient_page extends javax.swing.JFrame {
         });
 
         cancel_btn.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
+        cancel_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jtable/Delete-icon.png"))); // NOI18N
         cancel_btn.setText("Cancel");
         cancel_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -692,6 +704,7 @@ public class patient_page extends javax.swing.JFrame {
         });
 
         bookapp_btn.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
+        bookapp_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jtable/Actions-appointment-new-icon.png"))); // NOI18N
         bookapp_btn.setText("Book Appointment");
         bookapp_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -700,6 +713,7 @@ public class patient_page extends javax.swing.JFrame {
         });
 
         update_btn.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
+        update_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jtable/Actions-document-save-icon.png"))); // NOI18N
         update_btn.setText("Save");
         update_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -708,6 +722,7 @@ public class patient_page extends javax.swing.JFrame {
         });
 
         jButton7.setFont(new java.awt.Font("Lucida Grande", 1, 14)); // NOI18N
+        jButton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jtable/back-icon.png"))); // NOI18N
         jButton7.setText("Back");
         jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -854,7 +869,7 @@ public class patient_page extends javax.swing.JFrame {
                         .addComponent(update_btn))
                     .addComponent(bookapp_btn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE))
+                .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -863,6 +878,7 @@ public class patient_page extends javax.swing.JFrame {
         jLabel1.setText("Patient");
 
         new_btn.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
+        new_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jtable/ADD.png"))); // NOI18N
         new_btn.setText("New ");
         new_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -871,6 +887,7 @@ public class patient_page extends javax.swing.JFrame {
         });
 
         search_btn.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
+        search_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jtable/Start-Menu-Search-icon.png"))); // NOI18N
         search_btn.setText("Search");
         search_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -879,6 +896,7 @@ public class patient_page extends javax.swing.JFrame {
         });
 
         logout_btn.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
+        logout_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jtable/back-icon.png"))); // NOI18N
         logout_btn.setText("Back");
         logout_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

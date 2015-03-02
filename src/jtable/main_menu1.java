@@ -99,9 +99,10 @@ public class main_menu1 extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel3.setFont(new java.awt.Font("Lucida Grande", 1, 36)); // NOI18N
-        jLabel3.setText("Hospital Menu");
+        jLabel3.setText("    Menu");
 
         patient_btn.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
+        patient_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jtable/People-Patient-Male-icon.png"))); // NOI18N
         patient_btn.setText("Patient");
         patient_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -110,9 +111,11 @@ public class main_menu1 extends javax.swing.JFrame {
         });
 
         gp_diary.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
+        gp_diary.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jtable/Holiday-Diary-Book-icon.png"))); // NOI18N
         gp_diary.setText("GP Diary");
 
         appointment_btn.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
+        appointment_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jtable/Actions-appointment-new-icon.png"))); // NOI18N
         appointment_btn.setText("Appointments");
         appointment_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -121,6 +124,7 @@ public class main_menu1 extends javax.swing.JFrame {
         });
 
         logout_btn.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
+        logout_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jtable/Log-Out-icon.png"))); // NOI18N
         logout_btn.setText("Logout");
         logout_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -144,11 +148,11 @@ public class main_menu1 extends javax.swing.JFrame {
                             .addComponent(patient_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(appointment_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(75, 75, 75)
-                        .addComponent(jLabel3))
-                    .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(logout_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(logout_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(112, 112, 112)
+                        .addComponent(jLabel3)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
