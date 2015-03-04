@@ -6,8 +6,11 @@ import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -25,17 +28,27 @@ public class main_menu1 extends javax.swing.JFrame {
  int id;
  PreparedStatement pst;
     ResultSet rs;
+      Date dates = new Date();
+    DateFormat curday;
+    DateFormat curmonth;
+    DateFormat curyear;
+
     /**
      * Creates new form main_menu
      */
     public main_menu1() {
         initComponents();
+          String[] month = {"January", "Febuary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
          conn = javaconnected.ConnecrDb();
+          curday = new SimpleDateFormat("dd");
+        curmonth = new SimpleDateFormat("M");
+        curyear = new SimpleDateFormat("YYYY");
+
            String sql = "select Time,GPName,Date,PatientName from Appointment_Diary where Date=?";
         try {
 
             pst = conn.prepareStatement(sql);
-            pst.setString(1, "02" + "Febuary" + "2015");
+            pst.setString(1, curday.format(dates) + month[Integer.parseInt(curmonth.format(dates))-1] + curyear.format(dates));
             rs = pst.executeQuery();
             while (rs.next()) {
                 String result = rs.getString("Time");
@@ -70,11 +83,6 @@ public class main_menu1 extends javax.swing.JFrame {
                     }
                  Collections.sort(Appt);
 
-             
-        for (int i = 0; i < Appt.size(); i++) {
-
-            System.out.println(Appt.get(i).getPName() + " " + Appt.get(i).getGPName() + " " + Appt.get(i).getTime());
-        }
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 
