@@ -138,6 +138,7 @@ public class patient_page extends javax.swing.JFrame {
             pst.setString(4,search_postcode.getText());
 
             rs=pst.executeQuery();
+         
             search_results.setModel(DbUtils.resultSetToTableModel(rs));
             if(results >=1){
                   search_results.setVisible(true); 
@@ -224,6 +225,8 @@ public class patient_page extends javax.swing.JFrame {
         search_postcode = new javax.swing.JTextField();
         searchpatient_btn1 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         view_patient = new javax.swing.JFrame();
         jLabel15 = new javax.swing.JLabel();
         jSeparator3 = new javax.swing.JSeparator();
@@ -512,6 +515,11 @@ public class patient_page extends javax.swing.JFrame {
 
         jLabel27.setText("First Name:");
 
+        search_firstname.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                search_firstnameActionPerformed(evt);
+            }
+        });
         search_firstname.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 search_firstnameKeyTyped(evt);
@@ -582,6 +590,21 @@ public class patient_page extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText("Book Appointment");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("View Patient Details");
+        jButton2.setName(""); // NOI18N
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout search_patientLayout = new javax.swing.GroupLayout(search_patient.getContentPane());
         search_patient.getContentPane().setLayout(search_patientLayout);
         search_patientLayout.setHorizontalGroup(
@@ -589,36 +612,39 @@ public class patient_page extends javax.swing.JFrame {
             .addComponent(jSeparator2)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(search_patientLayout.createSequentialGroup()
-                .addGroup(search_patientLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(search_patientLayout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(search_patientLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel27)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(search_firstname, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel28)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(search_surname, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel30)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(search_dob, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel29)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(search_postcode, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(searchpatient_btn1)))
+                .addContainerGap()
+                .addComponent(jLabel27)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(search_firstname, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel28)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(search_surname, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel30)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(search_dob, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel29)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(search_postcode, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(searchpatient_btn1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, search_patientLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addGap(275, 275, 275))
+            .addGroup(search_patientLayout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton2)
+                .addGap(18, 18, 18)
+                .addComponent(jButton1)
+                .addGap(38, 38, 38))
         );
         search_patientLayout.setVerticalGroup(
             search_patientLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -645,7 +671,9 @@ public class patient_page extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(search_patientLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
-                    .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE))
+                    .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
                 .addContainerGap())
         );
 
@@ -959,6 +987,7 @@ public class patient_page extends javax.swing.JFrame {
 
     private void search_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_btnActionPerformed
         // TODO add your handling code here:
+       
         search_patient.pack();
         search_patient.setVisible(true);
     }//GEN-LAST:event_search_btnActionPerformed
@@ -1042,11 +1071,11 @@ public class patient_page extends javax.swing.JFrame {
             String add9=rs.getString("POSTCODE");
             view_postcode.setText(add9);
 
-        search_patient.setVisible(false);
+        //search_patient.setVisible(false);
         view_patient.pack();
-        view_patient.setVisible(true);
-        view_patient();
-        clear_search();
+      // view_patient.setVisible(true);
+       view_patient();
+      //  clear_search();
         }
         }catch(Exception e){
         JOptionPane.showMessageDialog(null, e);
@@ -1131,7 +1160,9 @@ public class patient_page extends javax.swing.JFrame {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
+       
         view_patient.setVisible(false);
+        search_patient.setVisible(true);
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void delete_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_btnActionPerformed
@@ -1297,6 +1328,26 @@ public class patient_page extends javax.swing.JFrame {
         // TODO add your handling code here:
         clear_search();
     }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+            
+        Tablex appt = new Tablex(add1+" "+add2);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+       if(search_firstname.getText().isEmpty()&&search_postcode.getText().isEmpty()&&search_dob.getText().isEmpty()&&search_surname.getText().isEmpty()||search_results.getRowCount()==0){
+               JOptionPane.showMessageDialog(null,"no patient found");
+       
+       }else{
+        search_patient.setVisible(false);
+          view_patient.pack();
+          view_patient.setVisible(true);
+       }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void search_firstnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_firstnameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_search_firstnameActionPerformed
     
     /**
      * @param args the command line arguments
@@ -1327,6 +1378,7 @@ public class patient_page extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new patient_page().setVisible(true);
             }
@@ -1345,6 +1397,8 @@ public class patient_page extends javax.swing.JFrame {
     private javax.swing.JButton edit_btn;
     private javax.swing.JTextField email;
     private javax.swing.JTextField home;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
