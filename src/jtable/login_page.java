@@ -1,6 +1,7 @@
 package jtable;
 
 
+import com.apple.eawt.Application;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
@@ -9,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /*
@@ -25,7 +27,7 @@ public class login_page extends javax.swing.JFrame {
     Connection conned = null;
     ResultSet rs = null;
     PreparedStatement pst = null;
-
+  ImageIcon frameimg = new ImageIcon("logo.jpg");;
     /**
      * Creates new form login_page
      */
@@ -35,6 +37,7 @@ public class login_page extends javax.swing.JFrame {
         conned = javaconnect.ConnecrDb();
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+    
     }
     
     
@@ -54,7 +57,9 @@ public class login_page extends javax.swing.JFrame {
     }
     */
     public void login(){
-    String sql ="select* from employee where username=? and password=?";
+     
+        Application.getApplication().setDockIconImage(frameimg.getImage());
+        String sql ="select* from employee where username=? and password=?";
     //String statement = "INSERT into Employee_info (last_login) VALUES (GetDate())";
         try{
        // pst = conn.prepareStatement(statement);
@@ -94,6 +99,7 @@ public class login_page extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
+        setIconImage(frameimg.getImage());
 
         username.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
 

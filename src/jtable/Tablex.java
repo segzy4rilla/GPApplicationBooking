@@ -86,7 +86,7 @@ public final class Tablex {
 
         JFrame fray = new JFrame("PickAdate");
 
-        JButton view = new JButton("View Timetable");
+        JButton view = new JButton("View Diary");
         JLabel appt = new JLabel("Appointment info : ");
 
         JPanel drop = new JPanel();

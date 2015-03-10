@@ -12,26 +12,13 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import net.proteanit.sql.DbUtils;
 
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author Zayn
- */
 public class patient_page extends javax.swing.JFrame {
     Connection conn = null;
     ResultSet rs = null;
     PreparedStatement pst = null;
  String add1;
   String add2;
-    /**
-     * Creates new form patient_page
-     */
+  
     public patient_page() {
         initComponents();
         conn = javaconnect.ConnecrDb();
@@ -39,7 +26,6 @@ public class patient_page extends javax.swing.JFrame {
         this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
         search_results.setVisible(false);
         patient_id.setVisible(false);
-
 
     }
     private void new_patient(){
@@ -140,13 +126,12 @@ public class patient_page extends javax.swing.JFrame {
             rs=pst.executeQuery();
          
             search_results.setModel(DbUtils.resultSetToTableModel(rs));
-            if(results >=1){
+          
+            if(results > 0){
                   search_results.setVisible(true); 
-        }else{
-          JOptionPane.showMessageDialog(null, "No Patient Record Found");   
-        search_results.setVisible(false);
+        }else if(results < 0){
         
-         
+            JOptionPane.showMessageDialog(null," no Patient record found");
             }
             
         }catch(SQLException | HeadlessException e){
@@ -590,6 +575,8 @@ public class patient_page extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setFont(new java.awt.Font("Lucida Grande", 1, 14)); // NOI18N
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jtable/Actions-appointment-new-icon.png"))); // NOI18N
         jButton1.setText("Book Appointment");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -597,6 +584,8 @@ public class patient_page extends javax.swing.JFrame {
             }
         });
 
+        jButton2.setFont(new java.awt.Font("Lucida Grande", 1, 14)); // NOI18N
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jtable/Eye-icon.png"))); // NOI18N
         jButton2.setText("View Patient Details");
         jButton2.setName(""); // NOI18N
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -669,11 +658,12 @@ public class patient_page extends javax.swing.JFrame {
                 .addGap(12, 12, 12)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(search_patientLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
-                    .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                .addGroup(search_patientLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(search_patientLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                        .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE))
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -978,6 +968,7 @@ public class patient_page extends javax.swing.JFrame {
          if (JOptionPane.showConfirmDialog(null, "Are you sure you want to Add Patient?", "WARNING",
         JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             new_patient.pack();
+            new_patient.setLocationRelativeTo(null);
             new_patient.setVisible(true);} 
          else {
     // no option
@@ -989,6 +980,7 @@ public class patient_page extends javax.swing.JFrame {
         // TODO add your handling code here:
        
         search_patient.pack();
+        search_patient.setLocationRelativeTo(null);
         search_patient.setVisible(true);
     }//GEN-LAST:event_search_btnActionPerformed
 
@@ -1146,7 +1138,7 @@ public class patient_page extends javax.swing.JFrame {
             pst.execute();
             JOptionPane.showMessageDialog(null, "Patient Details Updated"); 
             view_patient();
-        }catch(Exception e){
+        }catch(SQLException | HeadlessException e){
         JOptionPane.showMessageDialog(null, e);
         }
         finally {
