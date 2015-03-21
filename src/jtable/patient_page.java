@@ -1,6 +1,5 @@
 package jtable;
 
-
 import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
@@ -13,150 +12,141 @@ import javax.swing.JOptionPane;
 import net.proteanit.sql.DbUtils;
 
 public class patient_page extends javax.swing.JFrame {
+
     Connection conn = null;
     ResultSet rs = null;
     PreparedStatement pst = null;
- String add1;
-  String add2;
-  
+    String add1;
+    String add2;
+    String appt;
     public patient_page() {
         initComponents();
         conn = javaconnect.ConnecrDb();
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+        this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
         search_results.setVisible(false);
         patient_id.setVisible(false);
+        bookapp_btn1.setVisible(false);
+        edit_btn.setVisible(false);
 
     }
-    private void new_patient(){
-                try {
+
+    private void new_patient() {
+        try {
             String sql = "Insert Into Patients (Title,FIRSTNAME,SURNAME,DOB,EMAIL_ADD,ADD_1,ADD_2,COUNTY,POSTCODE,TEL,E_TEL) values (?,?,?,?,?,?,?,?,?,?,?)";
             pst = conn.prepareStatement(sql);
-            String title =(String)title_combo.getSelectedItem();
-             pst.setString(1, title);
-             pst.setString(2, FirstName.getText());
-             pst.setString(3, Surname.getText());
-             pst.setString(4, dob.getText());
-             pst.setString(5, email.getText());
-             pst.setString(6, add_1.getText());
-             pst.setString(7, add_2.getText());
-             pst.setString(8, town.getText());
-             pst.setString(9, postcode.getText());
-             pst.setString(10, mobile.getText());
-             pst.setString(11, home.getText());            
-             
-             pst.execute();
-            
+            String title = (String) title_combo.getSelectedItem();
+            pst.setString(1, title);
+            pst.setString(2, FirstName.getText());
+            pst.setString(3, Surname.getText());
+            pst.setString(4, dob.getText());
+            pst.setString(5, email.getText());
+            pst.setString(6, add_1.getText());
+            pst.setString(7, add_2.getText());
+            pst.setString(8, town.getText());
+            pst.setString(9, postcode.getText());
+            pst.setString(10, mobile.getText());
+            pst.setString(11, home.getText());
+
+            pst.execute();
+
             JOptionPane.showMessageDialog(null, "Patient Registered");
             new_patient.setVisible(false);
-                    
-                    
-        
-         }catch(Exception e ){
-             JOptionPane.showMessageDialog(null, e);
-         }
-         finally {
-        try{
-        rs.close(); pst.close(); }
-        catch(Exception e) 
-        { } }
-    
-    
-    }
-    
-    private void validation(){
-    if (FirstName.getText().equals("")||Surname.getText().equals("")||dob.getText().equals("")||email.getText().equals("")||add_1.getText().equals("")||town.getText().equals("")||postcode.getText().equals("")||mobile.getText().equals("")||home.getText().equals("") ) {
-    JOptionPane.showMessageDialog(null, "Please Complete All Feilds");
-    }
-    else {
-        new_patient();
-    
-    }
-    
-    
-    
-    
-    }
-    
-    private void view_patient(){
-            view_title.setEnabled(false);
-            view_firstname.setEditable(false);
-            view_surname.setEditable(false);
-            view_dob.setEditable(false);
-            view_email.setEditable(false);
-            view_add1.setEditable(false);
-            view_add2.setEditable(false);
-            view_town.setEditable(false);
-            view_mobile.setEditable(false);
-            view_home.setEditable(false);
-            view_postcode.setEditable(false);
-            cancel_btn.setVisible(false);
-            delete_btn.setVisible(false);
-            update_btn.setVisible(false);
-            edit_btn.setVisible(true);
 
-
-    
-    
-    }
-    
-    private void clear_search(){
-    search_firstname.setText("");
-    search_surname.setText("");
-    search_dob.setText("");
-    search_postcode.setText("");
-    search_results.setVisible(false);
-
-    
-    
-    
-    }
-    
-    private void new_search(){
-            try
-        {
-            int results = search_results.getRowCount();
-            String sql="select Title,FIRSTNAME as 'First Name',SURNAME as 'Surname',DOB as 'Date of Birth',ADD_1 as 'Address',POSTCODE as 'Postcode' from Patients where FIRSTNAME LIKE ('%' || ? || '%') AND SURNAME LIKE ('%' || ? || '%') AND DOB LIKE ('%' || ? || '%') AND POSTCODE LIKE ('%' || ? || '%') ORDER BY FIRSTNAME"; 
-            pst=conn.prepareStatement(sql);
-            pst.setString(1,search_firstname.getText());
-            pst.setString(2,search_surname.getText());
-            pst.setString(3,search_dob.getText());
-            pst.setString(4,search_postcode.getText());
-
-            rs=pst.executeQuery();
-         
-            search_results.setModel(DbUtils.resultSetToTableModel(rs));
-          
-            if(results > 0){
-                  search_results.setVisible(true); 
-        }else if(results < 0){
-        
-            JOptionPane.showMessageDialog(null," no Patient record found");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        } finally {
+            try {
+                rs.close();
+                pst.close();
+            } catch (Exception e) {
             }
-            
-        }catch(SQLException | HeadlessException e){
         }
-        finally {
-        try{
-        rs.close(); pst.close(); }
-        catch(Exception e) { } }
+
     }
 
+    private void validation() {
+        if (FirstName.getText().equals("") || Surname.getText().equals("") || dob.getText().equals("") || email.getText().equals("") || add_1.getText().equals("") || town.getText().equals("") || postcode.getText().equals("") || mobile.getText().equals("") || home.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Please Complete All Feilds");
+        } else {
+            new_patient();
 
-    
-    private void search_final(){
+        }
 
-        if(search_firstname.getText().equals("") && search_surname.getText().equals("") && search_dob.getText().equals("") && search_postcode.getText().equals("")){
-            JOptionPane.showMessageDialog(null, "Please Enter Text to Search","Error",JOptionPane.ERROR_MESSAGE);
-       /* }else if(results ==0){
-            JOptionPane.showMessageDialog(null, "No Records Found");  
+    }
 
-        */}
-        else{
-        new_search();
+    private void view_patient() {
+        view_title.setEnabled(false);
+        view_firstname.setEditable(false);
+        view_surname.setEditable(false);
+        view_dob.setEditable(false);
+        view_email.setEditable(false);
+        view_add1.setEditable(false);
+        view_add2.setEditable(false);
+        view_town.setEditable(false);
+        view_mobile.setEditable(false);
+        view_home.setEditable(false);
+        view_postcode.setEditable(false);
+        cancel_btn.setVisible(false);
+        delete_btn.setVisible(false);
+        update_btn.setVisible(false);
+        edit_btn.setVisible(true);
+
+    }
+
+    private void clear_search() {
+        search_firstname.setText("");
+        search_surname.setText("");
+        search_dob.setText("");
+        search_postcode.setText("");
+        search_results.setVisible(false);
+
+    }
+
+    private void new_search() {
+        try {
+            int results = search_results.getRowCount();
+            String sql = "select Title,FIRSTNAME as 'First Name',SURNAME as 'Surname',DOB as 'Date of Birth',ADD_1 as 'Address',POSTCODE as 'Postcode' from Patients where FIRSTNAME LIKE ('%' || ? || '%') AND SURNAME LIKE ('%' || ? || '%') AND DOB LIKE ('%' || ? || '%') AND POSTCODE LIKE ('%' || ? || '%') ORDER BY FIRSTNAME";
+            pst = conn.prepareStatement(sql);
+            pst.setString(1, search_firstname.getText());
+            pst.setString(2, search_surname.getText());
+            pst.setString(3, search_dob.getText());
+            pst.setString(4, search_postcode.getText());
+
+            rs = pst.executeQuery();
+
+            search_results.setModel(DbUtils.resultSetToTableModel(rs));
+
+            if (results > 0) {
+                search_results.setVisible(true);
+            } else if (results < 0) {
+
+                JOptionPane.showMessageDialog(null, " no Patient record found");
+            }
+
+        } catch (SQLException | HeadlessException e) {
+        } finally {
+            try {
+                rs.close();
+                pst.close();
+            } catch (Exception e) {
+            }
         }
     }
- 
+
+    private void search_final() {
+
+        if (search_firstname.getText().equals("") && search_surname.getText().equals("") && search_dob.getText().equals("") && search_postcode.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Please Enter Text to Search", "Error", JOptionPane.ERROR_MESSAGE);
+            /* }else if(results ==0){
+             JOptionPane.showMessageDialog(null, "No Records Found");  
+
+             */
+        } else {
+            new_search();
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -240,10 +230,11 @@ public class patient_page extends javax.swing.JFrame {
         edit_btn = new javax.swing.JButton();
         delete_btn = new javax.swing.JButton();
         cancel_btn = new javax.swing.JButton();
-        bookapp_btn = new javax.swing.JButton();
+        editapp_btn = new javax.swing.JButton();
         update_btn = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         patient_id = new javax.swing.JLabel();
+        bookapp_btn1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         new_btn = new javax.swing.JButton();
         search_btn = new javax.swing.JButton();
@@ -721,12 +712,12 @@ public class patient_page extends javax.swing.JFrame {
             }
         });
 
-        bookapp_btn.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
-        bookapp_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jtable/Actions-appointment-new-icon.png"))); // NOI18N
-        bookapp_btn.setText("Book Appointment");
-        bookapp_btn.addActionListener(new java.awt.event.ActionListener() {
+        editapp_btn.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
+        editapp_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jtable/Pencil-icon.png"))); // NOI18N
+        editapp_btn.setText("Edit Appointment");
+        editapp_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bookapp_btnActionPerformed(evt);
+                editapp_btnActionPerformed(evt);
             }
         });
 
@@ -745,6 +736,15 @@ public class patient_page extends javax.swing.JFrame {
         jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton7ActionPerformed(evt);
+            }
+        });
+
+        bookapp_btn1.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
+        bookapp_btn1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jtable/Actions-appointment-new-icon.png"))); // NOI18N
+        bookapp_btn1.setText("Book Appointment");
+        bookapp_btn1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bookapp_btn1ActionPerformed(evt);
             }
         });
 
@@ -781,6 +781,25 @@ public class patient_page extends javax.swing.JFrame {
                                         .addGap(0, 0, Short.MAX_VALUE))
                                     .addComponent(view_add1)))))
                     .addGroup(view_patientLayout.createSequentialGroup()
+                        .addGroup(view_patientLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)
+                            .addComponent(edit_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(view_patientLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(delete_btn)
+                            .addGroup(view_patientLayout.createSequentialGroup()
+                                .addComponent(update_btn)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cancel_btn)))
+                        .addGap(36, 36, 36)
+                        .addGroup(view_patientLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(view_patientLayout.createSequentialGroup()
+                                .addComponent(editapp_btn)
+                                .addGap(79, 182, Short.MAX_VALUE))
+                            .addGroup(view_patientLayout.createSequentialGroup()
+                                .addComponent(bookapp_btn1)
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(view_patientLayout.createSequentialGroup()
                         .addGroup(view_patientLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, view_patientLayout.createSequentialGroup()
                                 .addComponent(jLabel16)
@@ -815,24 +834,12 @@ public class patient_page extends javax.swing.JFrame {
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, view_patientLayout.createSequentialGroup()
                                         .addComponent(patient_id)
                                         .addGap(12, 12, 12)))))
-                        .addGap(0, 19, Short.MAX_VALUE))
-                    .addGroup(view_patientLayout.createSequentialGroup()
-                        .addGroup(view_patientLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)
-                            .addComponent(edit_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(delete_btn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cancel_btn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(update_btn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(bookapp_btn)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, view_patientLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(view_patientLayout.createSequentialGroup()
+                .addGap(197, 197, 197)
                 .addComponent(jLabel15)
-                .addGap(157, 157, 157))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         view_patientLayout.setVerticalGroup(
             view_patientLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -879,15 +886,16 @@ public class patient_page extends javax.swing.JFrame {
                     .addComponent(view_home, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(view_mobile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(36, 36, 36)
-                .addGroup(view_patientLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(view_patientLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(edit_btn)
-                        .addComponent(delete_btn)
-                        .addComponent(cancel_btn)
-                        .addComponent(update_btn))
-                    .addComponent(bookapp_btn))
+                .addGroup(view_patientLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(edit_btn)
+                    .addComponent(delete_btn)
+                    .addComponent(bookapp_btn1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE))
+                .addGroup(view_patientLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+                    .addComponent(update_btn)
+                    .addComponent(editapp_btn)
+                    .addComponent(cancel_btn)))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -965,20 +973,20 @@ public class patient_page extends javax.swing.JFrame {
 
     private void new_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_new_btnActionPerformed
         // TODO add your handling code here:
-         if (JOptionPane.showConfirmDialog(null, "Are you sure you want to Add Patient?", "WARNING",
-        JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+        if (JOptionPane.showConfirmDialog(null, "Are you sure you want to Add Patient?", "WARNING",
+                JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             new_patient.pack();
             new_patient.setLocationRelativeTo(null);
-            new_patient.setVisible(true);} 
-         else {
-    // no option
-    }
-           
+            new_patient.setVisible(true);
+        } else {
+            // no option
+        }
+
     }//GEN-LAST:event_new_btnActionPerformed
 
     private void search_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_btnActionPerformed
         // TODO add your handling code here:
-       
+
         search_patient.pack();
         search_patient.setLocationRelativeTo(null);
         search_patient.setVisible(true);
@@ -1001,7 +1009,7 @@ public class patient_page extends javax.swing.JFrame {
         town.setText("");
         postcode.setText("");
         mobile.setText("");
-        home.setText(""); 
+        home.setText("");
 
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -1013,8 +1021,8 @@ public class patient_page extends javax.swing.JFrame {
     private void logout_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logout_btnActionPerformed
         // TODO add your handling code here:
         main_menu1 s = new main_menu1();
-            s.setVisible(true);
-            dispose();
+        s.setVisible(true);
+        dispose();
     }//GEN-LAST:event_logout_btnActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
@@ -1025,78 +1033,80 @@ public class patient_page extends javax.swing.JFrame {
 
     private void search_resultsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_search_resultsMouseClicked
         // TODO add your handling code here:
-               try{
-        int row = search_results.getSelectedRow();
-        int results = search_results.getSelectedColumnCount();
-        String table_click = (search_results.getModel().getValueAt(row, 1).toString());
-        String table_click2 = (search_results.getModel().getValueAt(row, 2).toString());
-        String table_click3 = (search_results.getModel().getValueAt(row, 3).toString());
-       
+        try {
+            int row = search_results.getSelectedRow();
+            int results = search_results.getSelectedColumnCount();
+            String table_click = (search_results.getModel().getValueAt(row, 1).toString());
+            String table_click2 = (search_results.getModel().getValueAt(row, 2).toString());
+            String table_click3 = (search_results.getModel().getValueAt(row, 3).toString());
 
-        String sql="select * from Patients where FIRSTNAME='"+table_click+"' and SURNAME='"+table_click2+"' and DOB='"+table_click3+"'";
-        pst=conn.prepareStatement(sql);
-        rs=pst.executeQuery();
-        if(rs.next()){
-        
-            String p_id=rs.getString("patient_id");
-            patient_id.setText(p_id);
-            String title=rs.getString("Title");
-            view_title.addItem(title);
-            add1=rs.getString("FIRSTNAME");
-            view_firstname.setText(add1);
-             add2=rs.getString("SURNAME");
-            view_surname.setText(add2);
-            String add3=rs.getString("DOB");
-            view_dob.setText(add3);
-            String add10=rs.getString("EMAIL_ADD");
-            view_email.setText(add10);
-            String add4=rs.getString("ADD_1");
-            view_add1.setText(add4);
-            String add5=rs.getString("ADD_2");
-            view_add2.setText(add5);
-            String add6=rs.getString("COUNTY");
-            view_town.setText(add6);
-            String add7=rs.getString("TEL");
-            view_mobile.setText(add7);
-            String add8=rs.getString("E_TEL");
-            view_home.setText(add8);
-            String add9=rs.getString("POSTCODE");
-            view_postcode.setText(add9);
+            String sql = "select * from Patients where FIRSTNAME='" + table_click + "' and SURNAME='" + table_click2 + "' and DOB='" + table_click3 + "'";
+            pst = conn.prepareStatement(sql);
+            rs = pst.executeQuery();
+            if (rs.next()) {
 
-        //search_patient.setVisible(false);
-        view_patient.pack();
-      // view_patient.setVisible(true);
-       view_patient();
-      //  clear_search();
+                String p_id = rs.getString("patient_id");
+                patient_id.setText(p_id);
+                String title = rs.getString("Title");
+                view_title.addItem(title);
+                add1 = rs.getString("FIRSTNAME");
+                view_firstname.setText(add1);
+                add2 = rs.getString("SURNAME");
+                view_surname.setText(add2);
+                String add3 = rs.getString("DOB");
+                view_dob.setText(add3);
+                String add10 = rs.getString("EMAIL_ADD");
+                view_email.setText(add10);
+                String add4 = rs.getString("ADD_1");
+                view_add1.setText(add4);
+                String add5 = rs.getString("ADD_2");
+                view_add2.setText(add5);
+                String add6 = rs.getString("COUNTY");
+                view_town.setText(add6);
+                String add7 = rs.getString("TEL");
+                view_mobile.setText(add7);
+                String add8 = rs.getString("E_TEL");
+                view_home.setText(add8);
+                String add9 = rs.getString("POSTCODE");
+                view_postcode.setText(add9);
+
+              appt = rs.getString("AppointmentInfo");
+                
+                //search_patient.setVisible(false);
+                view_patient.pack();
+                // view_patient.setVisible(true);
+                view_patient();
+                //  clear_search();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        } finally {
+            try {
+                rs.close();
+                pst.close();
+            } catch (Exception e) {
+            }
         }
-        }catch(Exception e){
-        JOptionPane.showMessageDialog(null, e);
-        }
-        finally {
-        try{
-        rs.close(); pst.close(); }
-        catch(Exception e) { } }
 
     }//GEN-LAST:event_search_resultsMouseClicked
 
     private void edit_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edit_btnActionPerformed
         // TODO add your handling code here:
-                view_title.setEnabled(true);
-            view_firstname.setEditable(true);
-            view_surname.setEditable(true);
-            view_dob.setEditable(true);
-            view_email.setEditable(true);
-            view_add1.setEditable(true);
-            view_add2.setEditable(true);
-            view_town.setEditable(true);
-            view_mobile.setEditable(true);
-            view_home.setEditable(true);
-            view_postcode.setEditable(true);
-            cancel_btn.setVisible(true);
-            delete_btn.setVisible(true);
-            edit_btn.setVisible(false);
-                        update_btn.setVisible(true);
-
+        view_title.setEnabled(true);
+        view_firstname.setEditable(true);
+        view_surname.setEditable(true);
+        view_dob.setEditable(true);
+        view_email.setEditable(true);
+        view_add1.setEditable(true);
+        view_add2.setEditable(true);
+        view_town.setEditable(true);
+        view_mobile.setEditable(true);
+        view_home.setEditable(true);
+        view_postcode.setEditable(true);
+        cancel_btn.setVisible(true);
+        delete_btn.setVisible(true);
+        edit_btn.setVisible(false);
+        update_btn.setVisible(true);
 
 
     }//GEN-LAST:event_edit_btnActionPerformed
@@ -1106,141 +1116,142 @@ public class patient_page extends javax.swing.JFrame {
         view_patient();
     }//GEN-LAST:event_cancel_btnActionPerformed
 
-    private void bookapp_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bookapp_btnActionPerformed
-          Tablex appt = new Tablex(add1+" "+add2);
+    private void editapp_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editapp_btnActionPerformed
+        Tablex appt = new Tablex(add1 + " " + add2);
 
-    }//GEN-LAST:event_bookapp_btnActionPerformed
+    }//GEN-LAST:event_editapp_btnActionPerformed
 
     private void update_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_update_btnActionPerformed
         // TODO add your handling code here:
-               if (JOptionPane.showConfirmDialog(null, "Are you sure you want to update patient details?", "WARNING",
-        JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+        if (JOptionPane.showConfirmDialog(null, "Are you sure you want to update patient details?", "WARNING",
+                JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
     // yes option
-           //String title =(String)title_combo.getSelectedItem();
-          //String driver =(String)driver_combo.getSelectedItem();
+            //String title =(String)title_combo.getSelectedItem();
+            //String driver =(String)driver_combo.getSelectedItem();
             // pst.setString(1, title);
-        try{
-            String title =(String)view_title.getSelectedItem();
-            String p_id = patient_id.getText();
-            String firstname = view_firstname.getText();
-            String surname = view_surname.getText();
-            String dob1 = view_dob.getText();
-            String add1 = view_add1.getText();
-            String add2 = view_add2.getText();
-            String town1 = view_town.getText();
-            String postcode1 = view_postcode.getText();
-            String home1 = view_home.getText();
-            String mobile1 = view_mobile.getText();
-            String email1 = view_email.getText();
+            try {
+                String title = (String) view_title.getSelectedItem();
+                String p_id = patient_id.getText();
+                String firstname = view_firstname.getText();
+                String surname = view_surname.getText();
+                String dob1 = view_dob.getText();
+                String add1 = view_add1.getText();
+                String add2 = view_add2.getText();
+                String town1 = view_town.getText();
+                String postcode1 = view_postcode.getText();
+                String home1 = view_home.getText();
+                String mobile1 = view_mobile.getText();
+                String email1 = view_email.getText();
 
-            String sql="update Patients set Title='"+title+"',FIRSTNAME='"+firstname+"',SURNAME='"+surname+"',DOB='"+dob1+"',EMAIL_ADD='"+email1+"',ADD_1='"+add1+"',ADD_2='"+add2+"' ,COUNTY='"+town1+"',TEL='"+mobile1+"',E_TEL='"+home1+"', POSTCODE='"+postcode1+"' where patient_id='"+p_id+"' ";
-            pst=conn.prepareStatement(sql);
-            pst.execute();
-            JOptionPane.showMessageDialog(null, "Patient Details Updated"); 
-            view_patient();
-        }catch(SQLException | HeadlessException e){
-        JOptionPane.showMessageDialog(null, e);
-        }
-        finally {
-        try{
-        rs.close(); pst.close(); }
-        catch(Exception e) { } }
+                String sql = "update Patients set Title='" + title + "',FIRSTNAME='" + firstname + "',SURNAME='" + surname + "',DOB='" + dob1 + "',EMAIL_ADD='" + email1 + "',ADD_1='" + add1 + "',ADD_2='" + add2 + "' ,COUNTY='" + town1 + "',TEL='" + mobile1 + "',E_TEL='" + home1 + "', POSTCODE='" + postcode1 + "' where patient_id='" + p_id + "' ";
+                pst = conn.prepareStatement(sql);
+                pst.execute();
+                JOptionPane.showMessageDialog(null, "Patient Details Updated");
+                view_patient();
+            } catch (SQLException | HeadlessException e) {
+                JOptionPane.showMessageDialog(null, e);
+            } finally {
+                try {
+                    rs.close();
+                    pst.close();
+                } catch (Exception e) {
+                }
+            }
         } else {
-    // no option
-        } 
+            // no option
+        }
     }//GEN-LAST:event_update_btnActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
-       
+
         view_patient.setVisible(false);
         search_patient.setVisible(true);
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void delete_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_btnActionPerformed
         // TODO add your handling code here:
-               if (JOptionPane.showConfirmDialog(null, "Are you sure you want to Delete Patient?", "WARNING",
-        JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-        String sql="delete from Patients where patient_id =?";
-        try{
-        pst=conn.prepareStatement(sql);
-        pst.setString(1,patient_id.getText());
-        pst.execute();
-        JOptionPane.showMessageDialog(null, "Patient Deleted");
-        view_patient.setVisible(false);
-        
-        
-        
-        }catch(Exception e ){
-            
-            
-             JOptionPane.showMessageDialog(null, e);
+        if (JOptionPane.showConfirmDialog(null, "Are you sure you want to Delete Patient?", "WARNING",
+                JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+            String sql = "delete from Patients where patient_id =?";
+            try {
+                pst = conn.prepareStatement(sql);
+                pst.setString(1, patient_id.getText());
+                pst.execute();
+                JOptionPane.showMessageDialog(null, "Patient Deleted");
+                view_patient.setVisible(false);
+
+            } catch (Exception e) {
+
+                JOptionPane.showMessageDialog(null, e);
+            } finally {
+                try {
+                    rs.close();
+                    pst.close();
+                } catch (Exception e) {
+                }
+            }
+        } else {
+            // no option
         }
-        finally {
-        try{
-        rs.close(); pst.close(); }
-        catch(Exception e) { } }
-          } else {
-    // no option
-    }
-       
+
     }//GEN-LAST:event_delete_btnActionPerformed
 
     private void mobileKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_mobileKeyTyped
         // TODO add your handling code here:
-          char c=evt.getKeyChar();
-        if(!(Character.isDigit(c) || c==KeyEvent.VK_BACK_SPACE
-        || c==KeyEvent.VK_DELETE)) {
-        getToolkit().beep();
-        evt.consume();
-        } 
+        char c = evt.getKeyChar();
+        if (!(Character.isDigit(c) || c == KeyEvent.VK_BACK_SPACE
+                || c == KeyEvent.VK_DELETE)) {
+            getToolkit().beep();
+            evt.consume();
+        }
     }//GEN-LAST:event_mobileKeyTyped
 
     private void homeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_homeKeyTyped
         // TODO add your handling code here:
-          char c=evt.getKeyChar();
-        if(!(Character.isDigit(c) || c==KeyEvent.VK_BACK_SPACE
-        || c==KeyEvent.VK_DELETE)) {
-        getToolkit().beep();
-        evt.consume();
-        } 
+        char c = evt.getKeyChar();
+        if (!(Character.isDigit(c) || c == KeyEvent.VK_BACK_SPACE
+                || c == KeyEvent.VK_DELETE)) {
+            getToolkit().beep();
+            evt.consume();
+        }
     }//GEN-LAST:event_homeKeyTyped
 
     private void FirstNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_FirstNameKeyTyped
         // TODO add your handling code here:
-               char c=evt.getKeyChar();
-        if(!(Character.isAlphabetic(c) || c==KeyEvent.VK_BACK_SPACE
-        || c==KeyEvent.VK_DELETE)) {
-        evt.consume();
-        } 
+        char c = evt.getKeyChar();
+        if (!(Character.isAlphabetic(c) || c == KeyEvent.VK_BACK_SPACE
+                || c == KeyEvent.VK_DELETE)) {
+            evt.consume();
+        }
     }//GEN-LAST:event_FirstNameKeyTyped
 
     private void SurnameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_SurnameKeyTyped
         // TODO add your handling code here:
-               char c=evt.getKeyChar();
-        if(!(Character.isAlphabetic(c) || c==KeyEvent.VK_BACK_SPACE
-        || c==KeyEvent.VK_DELETE)) {
-        evt.consume();
-        } 
+        char c = evt.getKeyChar();
+        if (!(Character.isAlphabetic(c) || c == KeyEvent.VK_BACK_SPACE
+                || c == KeyEvent.VK_DELETE)) {
+            evt.consume();
+        }
     }//GEN-LAST:event_SurnameKeyTyped
 
     private void postcodeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_postcodeKeyTyped
         // TODO add your handling code here:
-                char c=evt.getKeyChar();
-        if(!(Character.isLetterOrDigit(c) || c==KeyEvent.VK_BACK_SPACE
-        || c==KeyEvent.VK_DELETE)) {
-        evt.consume();
-        } 
+        char c = evt.getKeyChar();
+        if (!(Character.isLetterOrDigit(c) || c == KeyEvent.VK_BACK_SPACE
+                || c == KeyEvent.VK_DELETE)) {
+            evt.consume();
+        }
     }//GEN-LAST:event_postcodeKeyTyped
 
     private void townKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_townKeyTyped
         // TODO add your handling code here:
-                char c=evt.getKeyChar();
-        if(!(Character.isAlphabetic(c) || c==KeyEvent.VK_BACK_SPACE
-        || c==KeyEvent.VK_DELETE)) {
-        getToolkit().beep();
-        evt.consume();
-        } 
+        char c = evt.getKeyChar();
+        if (!(Character.isAlphabetic(c) || c == KeyEvent.VK_BACK_SPACE
+                || c == KeyEvent.VK_DELETE)) {
+            getToolkit().beep();
+            evt.consume();
+        }
     }//GEN-LAST:event_townKeyTyped
 
     private void search_surnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_surnameActionPerformed
@@ -1262,57 +1273,57 @@ public class patient_page extends javax.swing.JFrame {
 
     private void search_firstnameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_search_firstnameKeyPressed
         // TODO add your handling code here:
-                    if (evt.getKeyCode()==KeyEvent.VK_ENTER){
-                    search_final();
-               }
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            search_final();
+        }
     }//GEN-LAST:event_search_firstnameKeyPressed
 
     private void search_surnameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_search_surnameKeyPressed
         // TODO add your handling code here:
-                    if (evt.getKeyCode()==KeyEvent.VK_ENTER){
-                    search_final();
-               }
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            search_final();
+        }
     }//GEN-LAST:event_search_surnameKeyPressed
 
     private void search_dobKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_search_dobKeyPressed
         // TODO add your handling code here:
-                    if (evt.getKeyCode()==KeyEvent.VK_ENTER){
-                    search_final();
-               }
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            search_final();
+        }
     }//GEN-LAST:event_search_dobKeyPressed
 
     private void search_postcodeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_search_postcodeKeyPressed
         // TODO add your handling code here:
-                    if (evt.getKeyCode()==KeyEvent.VK_ENTER){
-                    search_final();
-               }
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            search_final();
+        }
     }//GEN-LAST:event_search_postcodeKeyPressed
 
     private void search_firstnameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_search_firstnameKeyTyped
         // TODO add your handling code here:
-        char c=evt.getKeyChar();
-        if(!(Character.isAlphabetic(c) || c==KeyEvent.VK_BACK_SPACE
-        || c==KeyEvent.VK_DELETE)) {
-        evt.consume();
+        char c = evt.getKeyChar();
+        if (!(Character.isAlphabetic(c) || c == KeyEvent.VK_BACK_SPACE
+                || c == KeyEvent.VK_DELETE)) {
+            evt.consume();
         }
     }//GEN-LAST:event_search_firstnameKeyTyped
 
     private void search_surnameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_search_surnameKeyTyped
         // TODO add your handling code here:
-                char c=evt.getKeyChar();
-        if(!(Character.isAlphabetic(c) || c==KeyEvent.VK_BACK_SPACE
-        || c==KeyEvent.VK_DELETE)) {
-        evt.consume();
-    }   
+        char c = evt.getKeyChar();
+        if (!(Character.isAlphabetic(c) || c == KeyEvent.VK_BACK_SPACE
+                || c == KeyEvent.VK_DELETE)) {
+            evt.consume();
+        }
     }//GEN-LAST:event_search_surnameKeyTyped
 
     private void search_postcodeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_search_postcodeKeyTyped
         // TODO add your handling code here:
-                        char c=evt.getKeyChar();
-        if(!(Character.isLetterOrDigit(c) || c==KeyEvent.VK_BACK_SPACE
-        || c==KeyEvent.VK_DELETE)) {
-        evt.consume();
-        } 
+        char c = evt.getKeyChar();
+        if (!(Character.isLetterOrDigit(c) || c == KeyEvent.VK_BACK_SPACE
+                || c == KeyEvent.VK_DELETE)) {
+            evt.consume();
+        }
 
     }//GEN-LAST:event_search_postcodeKeyTyped
 
@@ -1322,25 +1333,29 @@ public class patient_page extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-            
-        Tablex appt = new Tablex(add1+" "+add2);
+
+        Tablex appt = new Tablex(add1 + " " + add2);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-       if(search_firstname.getText().isEmpty()&&search_postcode.getText().isEmpty()&&search_dob.getText().isEmpty()&&search_surname.getText().isEmpty()||search_results.getRowCount()==0){
-               JOptionPane.showMessageDialog(null,"no patient found");
-       
-       }else{
-        search_patient.setVisible(false);
-          view_patient.pack();
-          view_patient.setVisible(true);
-       }
+        if (search_firstname.getText().isEmpty() && search_postcode.getText().isEmpty() && search_dob.getText().isEmpty() && search_surname.getText().isEmpty() || search_results.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(null, "no patient found");
+
+        } else {
+            search_patient.setVisible(false);
+            view_patient.pack();
+            view_patient.setVisible(true);
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void search_firstnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_firstnameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_search_firstnameActionPerformed
-    
+
+    private void bookapp_btn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bookapp_btn1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bookapp_btn1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1382,11 +1397,12 @@ public class patient_page extends javax.swing.JFrame {
     private javax.swing.JTextField Surname;
     private javax.swing.JTextField add_1;
     private javax.swing.JTextField add_2;
-    private javax.swing.JButton bookapp_btn;
+    private javax.swing.JButton bookapp_btn1;
     private javax.swing.JButton cancel_btn;
     private javax.swing.JButton delete_btn;
     private javax.swing.JTextField dob;
     private javax.swing.JButton edit_btn;
+    private javax.swing.JButton editapp_btn;
     private javax.swing.JTextField email;
     private javax.swing.JTextField home;
     private javax.swing.JButton jButton1;

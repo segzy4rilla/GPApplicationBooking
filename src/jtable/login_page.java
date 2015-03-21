@@ -1,6 +1,5 @@
 package jtable;
 
-
 import com.apple.eawt.Application;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
@@ -18,59 +17,72 @@ import javax.swing.JOptionPane;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author Zayn
  */
 public class login_page extends javax.swing.JFrame {
+
     Connection conned = null;
     ResultSet rs = null;
     PreparedStatement pst = null;
-  ImageIcon frameimg = new ImageIcon("logo.jpg");;
+    ImageIcon frameimg = new ImageIcon("logo.jpg");
+    String selectedlogin;
+
     /**
      * Creates new form login_page
      */
     public login_page() {
         initComponents();
-        
+
         conned = javaconnect.ConnecrDb();
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
-    
+        this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
+
     }
-    
-    
+
     /*public void user(){
-       data currentuser = new data();
-       String sql ="select* from employee where username=? and password=?";
-      try{
-       pst = conn.prepareStatement(sql);
-       pst.setString(1,username.getText());
-       pst.setString(2,password.getText());
-        rs = pst.executeQuery();
-        currentuser.username= ("username");
-        currentuser.user_fullname=("first_name" + " " + "surname");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
-        }
-    }
-    */
-    public void login(){
-     
+     data currentuser = new data();
+     String sql ="select* from employee where username=? and password=?";
+     try{
+     pst = conn.prepareStatement(sql);
+     pst.setString(1,username.getText());
+     pst.setString(2,password.getText());
+     rs = pst.executeQuery();
+     currentuser.username= ("username");
+     currentuser.user_fullname=("first_name" + " " + "surname");
+     } catch (Exception e) {
+     JOptionPane.showMessageDialog(null, e);
+     }
+     }
+     */
+    public void login() {
+
         Application.getApplication().setDockIconImage(frameimg.getImage());
-        String sql ="select* from employee where username=? and password=?";
-    //String statement = "INSERT into Employee_info (last_login) VALUES (GetDate())";
-        try{
-       // pst = conn.prepareStatement(statement);
-        pst = conned.prepareStatement(sql);
-        pst.setString(1,username.getText().trim());
-        pst.setString(2,password.getText());
-        rs = pst.executeQuery();
+        if (Login.getSelectedItem().equals("Receptionist")) {
+            selectedlogin = "employee";
+        } else {
+            selectedlogin = "GP";
+        }
+        String sql = "select* from '" + selectedlogin + "' where username=? and password=?";
+        //String statement = "INSERT into Employee_info (last_login) VALUES (GetDate())";
+        try {
+            // pst = conn.prepareStatement(statement);
+            pst = conned.prepareStatement(sql);
+            pst.setString(1, username.getText().trim());
+            pst.setString(2, password.getText().trim());
+            rs = pst.executeQuery();
             if (rs.next()) {
-            main_menu1 s = new main_menu1();
-            s.setVisible(true);
-            dispose();
+                if (selectedlogin.equals("employee")) {
+                    main_menu1 s = new main_menu1();
+                    s.setVisible(true);
+                    dispose();
+                } else {
+                    String name = "Dr "+rs.getString("FIRSTNAME");
+                    JOptionPane.showMessageDialog(null, "Dr "+rs.getString("FIRSTNAME"));
+                   GPdia a = new GPdia(name);
+                    dispose();
+                }
             } else {
                 JOptionPane.showMessageDialog(null, "Invalid Username or Password");
                 //user_name.setText("");
@@ -78,11 +90,13 @@ public class login_page extends javax.swing.JFrame {
             }
         } catch (SQLException | HeadlessException e) {
             JOptionPane.showMessageDialog(null, e);
+        } finally {
+            try {
+                rs.close();
+                pst.close();
+            } catch (Exception e) {
+            }
         }
-        finally {
-        try{
-        rs.close(); pst.close(); }
-        catch(Exception e) { } }
 
     }
 
@@ -90,12 +104,17 @@ public class login_page extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jComboBox1 = new javax.swing.JComboBox();
         username = new javax.swing.JTextField();
         password = new javax.swing.JPasswordField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
+        Login_Lab = new javax.swing.JLabel();
+        Login = new javax.swing.JComboBox();
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -126,14 +145,21 @@ public class login_page extends javax.swing.JFrame {
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jtable/medlogo.png"))); // NOI18N
 
+        Login_Lab.setText("Login As:");
+        Login_Lab.setName(""); // NOI18N
+        Login_Lab.setNextFocusableComponent(password);
+        Login_Lab.setRequestFocusEnabled(false);
+
+        Login.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Receptionist", "GP" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(183, 183, 183)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(89, 89, 89))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(70, 70, 70)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -143,13 +169,17 @@ public class login_page extends javax.swing.JFrame {
                         .addComponent(username, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(40, 40, 40)
-                        .addComponent(jLabel3))
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(Login_Lab)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Login, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(jLabel2)
                         .addGap(3, 3, 3)
-                        .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(103, Short.MAX_VALUE))
+                        .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -160,19 +190,23 @@ public class login_page extends javax.swing.JFrame {
                         .addGap(160, 160, 160)
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(150, 150, 150)
+                        .addGap(35, 35, 35)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(Login_Lab)
+                            .addComponent(Login, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(88, 88, 88)
                         .addComponent(username, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel3))
                 .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(28, 28, 28)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(48, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
-        setBounds(0, 0, 433, 365);
+        setBounds(0, 0, 509, 365);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -182,9 +216,9 @@ public class login_page extends javax.swing.JFrame {
 
     private void passwordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordKeyPressed
 
-        if (evt.getKeyCode()==KeyEvent.VK_ENTER){
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             login();
-               }
+        }
     }//GEN-LAST:event_passwordKeyPressed
 
     public static void main(String args[]) {
@@ -218,7 +252,10 @@ public class login_page extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox Login;
+    private javax.swing.JLabel Login_Lab;
     private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

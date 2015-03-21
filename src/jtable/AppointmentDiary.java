@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package jtable;
 
 import com.apple.eawt.Application;
@@ -11,6 +7,9 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -18,11 +17,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+                                       
 
-/**
- *
- * @author Godwinstuff
- */
 public class AppointmentDiary {
 
     static ImageIcon frameimg;
@@ -33,6 +29,7 @@ public class AppointmentDiary {
     JComboBox Time = new JComboBox();
     JButton filter = new JButton("Filter results");
     JButton back = new JButton("Back");
+    JButton next = new JButton("Next");
     JButton cancel = new JButton("Cancel");
     String selectedgp;
     String time;
@@ -40,10 +37,13 @@ public class AppointmentDiary {
     JRadioButton gpname;
     JRadioButton aptime;
     ButtonGroup group;
-    
-
+    int currentdate;
+    PreparedStatement pst;
+    ResultSet rs;
+    Connection conn;
     AppointmentDiary(ArrayList<Appointment> appointmentdetails) {
-
+ 
+        conn = javaconnected.ConnecrDb();
         details = appointmentdetails;
 
     }
@@ -62,6 +62,7 @@ public class AppointmentDiary {
             Object[] data = {detail.getDate(), detail.getTime(), detail.getPName(), detail.getGPName()};
             model.addRow(data);
         }
+         currentdate = Integer.parseInt(details.get(0).getDate().substring(0, 2));
         diary = new JTable(model);
         diary.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
 
@@ -81,8 +82,30 @@ public class AppointmentDiary {
         });
 
         back.addActionListener((ActionEvent e) -> {
-
-            Diaryframe.dispose();
+             currentdate = currentdate-1;
+            if(currentdate!=0){
+               
+                 model.setRowCount(0);
+              try{
+                 String sql  = "Select * from Appointment_Diary where Date = (?)";
+                 pst=conn.prepareStatement(sql);
+                pst.setString(1,currentdate+details.get(0).getDate().substring(2,details.get(0).getDate().length()));
+                 rs=pst.executeQuery();
+                 while(rs.next()){
+                 String PatientName = rs.getString("PatientName");
+                 String GPName = rs.getString("GPName");
+                 String timE = rs.getString("Time");
+                 String Date = rs.getString("Date");
+                 Object[]data ={Date,timE,PatientName,GPName};
+                  model.addRow(data);
+                 }
+              }catch(Exception ex){
+                  
+              }
+          
+                diary.repaint();
+                diary.revalidate();
+           }
 
         });
         cancel.addActionListener((ActionEvent e) -> {
@@ -113,11 +136,42 @@ public class AppointmentDiary {
         footer.add(filter);
         footer.add(cancel);
         footer.add(back);
+        footer.add(next);
 
         final TableRowSorter<TableModel> sorter = new TableRowSorter<>(model);
         diary.setRowSorter(sorter);
         scroll = new JScrollPane(diary);
 
+           
+             next.addActionListener((ActionEvent e) -> {
+           currentdate=currentdate+1;
+            if(currentdate<31){
+               
+                 model.setRowCount(0);
+              try{
+                 String sql  = "Select * from Appointment_Diary where Date = (?)";
+                 pst=conn.prepareStatement(sql);
+                pst.setString(1,currentdate+details.get(0).getDate().substring(2,details.get(0).getDate().length()));
+                 rs=pst.executeQuery();
+                 while(rs.next()){
+                 String PatientName = rs.getString("PatientName");
+                 String GPName = rs.getString("GPName");
+                 String timE = rs.getString("Time");
+                 String Date = rs.getString("Date");
+                 Object[]data ={Date,timE,PatientName,GPName};
+                  model.addRow(data);
+                 GP.addItem(GPName);
+                 Time.addItem(timE);
+                 }
+              }catch(Exception ex){
+                  
+              }
+          
+                diary.repaint();
+                diary.revalidate();
+           }
+                             });
+            
         filter.addActionListener((ActionEvent e) -> {
 
             String text = (String) GP.getSelectedItem();

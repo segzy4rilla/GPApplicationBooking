@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package jtable;
 
 import com.apple.eawt.Application;
@@ -14,9 +10,11 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 import java.util.Collections;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -46,12 +44,13 @@ public class Mytable {
     JPanel Confirm = new JPanel();
     JLabel Apptinfo;
     JButton back;
+    JButton next;
     JButton confirm;
     String GPName;
     String PatientName;
     String ApptDate;
     String Appttime;
-    PreparedStatement pst;
+    PreparedStatement pst,pst2;
     ImageIcon frameimg;
     ArrayList<Appointment> Appointmentdetails = new ArrayList<>();
     String GP;
@@ -63,6 +62,7 @@ public class Mytable {
     int currentcolumn = 0;
     JButton Diary;
     int saveclick = 0;
+    Connection connect;
     
     Mytable(String[] Jul, String[] Seven, String[] Simran, String[] Zazu, String[] Amie, String[] hel,
             String[] Smi, String[] Jal, String Day, String Month, String Year, ArrayList<Appointment> APPoint, String PName, boolean pastdet) {
@@ -81,6 +81,7 @@ public class Mytable {
         Appointmentdetails = APPoint;
         PatientName = PName;
         pastdetails = pastdet;
+        connect=javaconnect.ConnecrDb();
     }
     
     public void makeframe() {
@@ -105,6 +106,7 @@ public class Mytable {
         frameimg = new ImageIcon("logo.jpg");
         
         back = new JButton("BACK");
+        next = new JButton("NEXT");
         table.setGridColor(Color.BLUE);
         confirm = new JButton(" Save ");
         confirm.setEnabled(false);
@@ -254,6 +256,7 @@ public class Mytable {
             
         });
         Diary = new JButton(day + " " + month + " Diary");
+       
         Diary.addActionListener((ActionEvent e) -> {
             Collections.sort(Appointmentdetails);
             
@@ -262,6 +265,8 @@ public class Mytable {
             
         });
         
+        String[]Name= PatientName.split(" ");
+        
         confirm.addActionListener((ActionEvent e) -> {
             int choice = JOptionPane.showOptionDialog(null, " Do you want to confirm this appointment",
                     "Appointment Information", JOptionPane.INFORMATION_MESSAGE, JOptionPane.OK_CANCEL_OPTION,
@@ -269,14 +274,20 @@ public class Mytable {
             if (choice == JOptionPane.INFORMATION_MESSAGE) {
                 try {
                     String sql = "Insert Into Appointment_Diary(PatientName,GPName,Time,Date) values (?,?,?,?)";
+                    String sql2 ="update Patients set AppointmentInfo='"+GPName+" "+Appttime+" "+ApptDate+"' where Firstname ='"+Name[0]+"'";
+
                     pst = conn.prepareStatement(sql);
-                    
+                    pst2 = connect.prepareStatement(sql2);
+        
                     pst.setString(1, PatientName);
                     pst.setString(2, GPName);
                     pst.setString(3, Appttime);
                     pst.setString(4, ApptDate);
                     
+              
+                    
                     pst.execute();
+                    pst2.execute();
                     
                     JOptionPane.showMessageDialog(null, "Appointment Booked");
                     saveclick++;
@@ -296,6 +307,7 @@ public class Mytable {
         
         Confirm.add(Diary);
         Confirm.add(back);
+        Confirm.add(next);
         tablescroll = new JScrollPane(table);
         table.revalidate();
         table.repaint();
