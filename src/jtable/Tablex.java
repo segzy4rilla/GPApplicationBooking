@@ -82,6 +82,7 @@ public final class Tablex {
     PreparedStatement pst;
     ResultSet rs;
 
+    
     public void maketable() {
 
         JFrame fray = new JFrame("PickAdate");
@@ -103,7 +104,8 @@ public final class Tablex {
         fray.setIconImage(frameimg.getImage());
         Application.getApplication().setDockIconImage(frameimg.getImage());
 
-        drop.setBackground(Color.gray);
+        drop.setBackground(Color.WHITE);
+        drop.setFont(new java.awt.Font("Geneva", 0, 18));
         //  fray.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         fray.setResizable(false);
         fray.setSize(790, 300);
@@ -112,6 +114,7 @@ public final class Tablex {
 
         fray.setLocationRelativeTo(null);
         fray.setVisible(true);
+        fray.setFont(new java.awt.Font("Geneva", 0, 18));
 
         view.addActionListener((ActionEvent e) -> {
 
@@ -175,7 +178,7 @@ public final class Tablex {
                 searchdb();
                 Mytable a = new Mytable(Julie, Sabha, Simmy, Zara, Amy, Helen, Smith, Jalooga, selectedday,
                         selectedmonth, selectedyear, Appt, patient, past);
-                a.makeframe();
+             a.makeframe();
 
                 //    System.out.println(selectedday + selectedmonth + selectedyear);
                 fray.revalidate();
@@ -188,6 +191,7 @@ public final class Tablex {
     public void searchdb() {
 
         //System.out.println(selectedday + selectedmonth + selectedyear);
+        
         String sql = "select Time,GPName,Date,PatientName from Appointment_Diary where Date=?";
         try {
 
