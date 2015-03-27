@@ -52,6 +52,8 @@ public class GPDiary {
         DefaultTableModel model = new DefaultTableModel();
         for (String Columnname : Columnnames) {
             model.addColumn(Columnname);
+            gpdiary.setTitle(name+"'s Diary");
+            
         }
 
         model.addRow(Columnnames);

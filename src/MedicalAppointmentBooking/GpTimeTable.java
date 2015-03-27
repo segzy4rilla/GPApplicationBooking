@@ -262,7 +262,7 @@ public class GpTimeTable {
         Diary.addActionListener((ActionEvent e) -> {
             Collections.sort(Appointmentdetails);
             
-            AppointmentDiary diary = new AppointmentDiary(Appointmentdetails);
+            MedicalAppointmentBooking.AppointmentDiary diary = new AppointmentDiary(Appointmentdetails);
             diary.makeframe();
             
         });

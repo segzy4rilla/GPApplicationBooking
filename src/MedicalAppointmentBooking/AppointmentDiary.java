@@ -1,6 +1,8 @@
 
 package MedicalAppointmentBooking;
 
+import MedicalAppointmentBooking.Appointment;
+import MedicalAppointmentBooking.javaconnect;
 import com.apple.eawt.Application;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -43,7 +45,8 @@ public class AppointmentDiary {
     Connection conn;
      DefaultTableModel model;
      JFrame Diaryframe = new JFrame("Appointment Diary");
-    AppointmentDiary(ArrayList<Appointment> appointmentdetails) {
+   
+     AppointmentDiary(ArrayList<Appointment> appointmentdetails) {
  
         conn = javaconnect.ConnecrDb();
         details = appointmentdetails;

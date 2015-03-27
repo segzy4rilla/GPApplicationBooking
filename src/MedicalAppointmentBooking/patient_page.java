@@ -1529,11 +1529,48 @@ public class patient_page extends javax.swing.JFrame {
     }//GEN-LAST:event_update_btnActionPerformed
 
     private void editapp_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editapp_btnActionPerformed
-        int choice = JOptionPane.showOptionDialog(null, " Do you want to Edit this appointment",
+      int choice = JOptionPane.showOptionDialog(null, " Do you want to Edit this appointment",
                     "Edit Appointment", JOptionPane.INFORMATION_MESSAGE, JOptionPane.OK_CANCEL_OPTION,
-                    null, new String[]{"Cancel", "Re-Book"}, "default");
-    }//GEN-LAST:event_editapp_btnActionPerformed
+                    null, new String[]{"Cancel", "Re-Book"}, "default");   
+   if (choice == JOptionPane.INFORMATION_MESSAGE) {
+       
+       JOptionPane.showMessageDialog(null, "Appointment is going to be deleted");
+       
+         try {
+                                        String sql = "Delete From Appointment_Diary where PatientName = ?";
+                                        pst = conn2.prepareStatement(sql);
+                                        
+                                        pst.setString(1, view_firstname.getText()+" "+view_surname.getText());
+                                        pst.execute();
+                                        apptlab.setText(" ");
+                                        deleteapp_btn.setEnabled(false);
+                                        editapp_btn.setEnabled(false);
+                                        bookapp_btn.setVisible(true);
+                                    } catch (Exception exe) {
+                                        System.out.println(exe);
+                                    }
+                              try{
+                                String sql = "update Patients set AppointmentInfo= ?";
+            pst = conn.prepareStatement(sql);
+            pst.setString(1, null);
+            pst.execute();
+            JOptionPane.showMessageDialog(null, "Patient Details Updated");
+            view_patient();
+        } catch (SQLException | HeadlessException e) {
+            JOptionPane.showMessageDialog(null, e);
+        } finally {
+            try {
+                rs.close();
+                pst.close();
+            } catch (Exception e) {
+            }
 
+            AppointmentDate apptex = new AppointmentDate(add1 + " " + add2);
+                   
+   }
+   
+    }//GEN-LAST:event_editapp_btnActionPerformed
+    }
     private void cancel_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancel_btnActionPerformed
         // TODO add your handling code here:
         view_patient();
@@ -1587,7 +1624,46 @@ public class patient_page extends javax.swing.JFrame {
     }//GEN-LAST:event_edit_btnActionPerformed
 
     private void Edit_butActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Edit_butActionPerformed
-     
+  int choice = JOptionPane.showOptionDialog(null, " Do you want to Edit this appointment",
+                    "Edit Appointment", JOptionPane.INFORMATION_MESSAGE, JOptionPane.OK_CANCEL_OPTION,
+                    null, new String[]{"Cancel", "Re-Book"}, "default");   
+   if (choice == JOptionPane.INFORMATION_MESSAGE) {
+       
+       JOptionPane.showMessageDialog(null, "Appointment is going to be deleted");
+       
+         try {
+                                        String sql = "Delete From Appointment_Diary where PatientName = ?";
+                                        pst = conn2.prepareStatement(sql);
+                                        
+                                        pst.setString(1, view_firstname.getText()+" "+view_surname.getText());
+                                        pst.execute();
+                                        apptlab.setText(" ");
+                                        deleteapp_btn.setEnabled(false);
+                                        editapp_btn.setEnabled(false);
+                                        bookapp_btn.setVisible(true);
+                                    } catch (Exception exe) {
+                                        System.out.println(exe);
+                                    }
+                              try{
+                                String sql = "update Patients set AppointmentInfo= ?";
+            pst = conn.prepareStatement(sql);
+            pst.setString(1, null);
+            pst.execute();
+            JOptionPane.showMessageDialog(null, "Patient Details Updated");
+            view_patient();
+        } catch (SQLException | HeadlessException e) {
+            JOptionPane.showMessageDialog(null, e);
+        } finally {
+            try {
+                rs.close();
+                pst.close();
+            } catch (Exception e) {
+            }
+
+            AppointmentDate apptex = new AppointmentDate(add1 + " " + add2);
+                   
+   }
+   }
     }//GEN-LAST:event_Edit_butActionPerformed
 
     private void deleteapp_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteapp_btnActionPerformed
